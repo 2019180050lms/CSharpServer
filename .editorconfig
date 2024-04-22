@@ -17,3 +17,9 @@ dotnet_diagnostic.CS8625.severity = suggestion
 
 # CS8604: 가능한 null 참조 인수입니다.
 dotnet_diagnostic.CS8604.severity = suggestion
+
+# IDE0019: 패턴 일치 사용
+dotnet_diagnostic.IDE0019.severity = suggestion
+
+# CS8600: null 리터럴 또는 가능한 null 값을 null을 허용하지 않는 형식으로 변환하는 중입니다.
+dotnet_diagnostic.CS8600.severity = suggestion

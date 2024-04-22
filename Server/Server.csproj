@@ -10,4 +10,7 @@
   <ItemGroup>
     <None Include="..\.editorconfig" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
+  </ItemGroup>
 </Project>
