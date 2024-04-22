@@ -28,6 +28,7 @@ namespace ServerCore
 
 	public class SendBuffer
 	{
+		// 정보를 수정하는 것이 아니라 읽기만 하기 떄문에 ok
 		byte[] mBuffer;
 		int mUsedSize = 0;
 
