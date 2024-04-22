@@ -1,10 +1,10 @@
-﻿namespace Server;
-
-class Program
+﻿namespace Server
 {
-    static void Main(string[] args)
+    class Program
     {
-        Console.WriteLine("Hello, World!");
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+        }
     }
 }
-
