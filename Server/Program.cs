@@ -11,9 +11,20 @@ namespace Server
         {
             Console.WriteLine($"OnConnected: {endPoint}");
 
+            int hp = 100;
+            int attack = 10;
+
             // Send
-            byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome To MMORPG Server !");
+            ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+            byte[] buffer1 = BitConverter.GetBytes(hp);
+            byte[] buffer2 = BitConverter.GetBytes(attack);
+            Array.Copy(buffer1, 0, openSegment.Array, openSegment.Offset, buffer1.Length);
+            Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer1.Length, buffer2.Length);
+            ArraySegment<byte> sendBuff = SendBufferHelper.Close(buffer1.Length + buffer2.Length);
+
             Send(sendBuff);
+
+            
             Thread.Sleep(1000);
             Disconnect();
         }

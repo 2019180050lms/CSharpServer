@@ -14,7 +14,7 @@ namespace ServerCore
 
 		object mLock = new object();
 
-		Queue<byte[]> mSendQueue = new Queue<byte[]>();
+		Queue<ArraySegment<byte>> mSendQueue = new Queue<ArraySegment<byte>>();
 		List<ArraySegment<byte>> mPendinglist = new List<ArraySegment<byte>>();
         SocketAsyncEventArgs mRecvArgs = new SocketAsyncEventArgs();
         SocketAsyncEventArgs mSendArgs = new SocketAsyncEventArgs();
@@ -32,7 +32,7 @@ namespace ServerCore
 			RegisterRecv();
 		}
 
-		public void Send(byte[] sendBuffer)
+		public void Send(ArraySegment<byte> sendBuffer)
         {
             // mSocket.Send(sendBuffer);
             lock (mLock)
@@ -59,8 +59,8 @@ namespace ServerCore
 		{
 			while(mSendQueue.Count > 0)
             {
-                byte[] buff = mSendQueue.Dequeue();
-				mPendinglist.Add(new ArraySegment<byte>(buff, 0, buff.Length));
+                ArraySegment<byte> buff = mSendQueue.Dequeue();
+				mPendinglist.Add(buff);
             }
 			mSendArgs.BufferList = mPendinglist;
 
