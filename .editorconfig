@@ -8,3 +8,12 @@ dotnet_diagnostic.CS8622.severity = suggestion
 
 # CS8602: null 가능 참조에 대한 역참조입니다.
 dotnet_diagnostic.CS8602.severity = suggestion
+
+# CS8618: 생성자를 종료할 때 null을 허용하지 않는 필드에 null이 아닌 값을 포함해야 합니다. null 허용으로 선언해 보세요.
+dotnet_diagnostic.CS8618.severity = suggestion
+
+# CS8625: Null 리터럴을 null을 허용하지 않는 참조 형식으로 변환할 수 없습니다.
+dotnet_diagnostic.CS8625.severity = suggestion
+
+# CS8604: 가능한 null 참조 인수입니다.
+dotnet_diagnostic.CS8604.severity = suggestion
