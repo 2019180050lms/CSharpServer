@@ -20,6 +20,39 @@ namespace Server
         public long playerId;
         public string name;
 
+        public struct SkillInfo
+        {
+            public int id;
+            public short level;
+            public float duration;
+
+            public bool Write(Span<byte> s, ref ushort count)
+            {
+                bool success = true;
+                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.id);
+                count += sizeof(int);
+                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.level);
+                count += sizeof(ushort);
+                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
+                count += sizeof(float);
+
+                return success;
+            }
+
+            public void Read(ReadOnlySpan<byte> s, ref ushort count)
+            {
+                this.id = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+                count += sizeof(int);
+                this.level = BitConverter.ToInt16(s.Slice(count, s.Length - count));
+                count += sizeof(short);
+                // ToSingle -> float
+                this.duration = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+                count += sizeof(float);
+            }
+        }
+
+        public List<SkillInfo> skills = new List<SkillInfo>();
+
         public PlayerInfoReq()
         {
             this.packetId = (ushort)PacketID.PlayerInfoReq;
@@ -46,6 +79,18 @@ namespace Server
 
             // byte -> string
             this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
+            count += nameLen;
+
+            // skill list
+            skills.Clear();
+            ushort skillLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+            count += sizeof(ushort);
+            for (int i = 0; i < skillLen; ++i)
+            {
+                SkillInfo skill = new SkillInfo();
+                skill.Read(s, ref count);
+                skills.Add(skill);
+            }
         }
 
         public override ArraySegment<byte> Write()
@@ -73,12 +118,29 @@ namespace Server
             // 1) string의 길이
             // 2) byte[] 문자열 보내기
             // c#은 2바이트므로 Length가 아닌 Encoding.Unicode 사용
+
+            /*
             ushort nameLen = (ushort)Encoding.Unicode.GetByteCount(this.name);
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen);
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
             count += sizeof(ushort);
             // 버퍼에 문자열 복사
             Array.Copy(Encoding.Unicode.GetBytes(this.name), 0, openSegment.Array, count, nameLen);
             count += nameLen;
+            */
+
+            // 위와 같음
+            ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, openSegment.Array, openSegment.Offset + count + sizeof(ushort));
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
+            count += sizeof(ushort);
+            count += nameLen;
+
+            // skill list
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)skills.Count);
+            count += sizeof(ushort);
+            foreach (SkillInfo skill in skills)
+            {
+                success &= skill.Write(s, ref count);
+            }
 
             // 패킷 사이즈
             success &= BitConverter.TryWriteBytes(s, count);
@@ -141,6 +203,11 @@ namespace Server
                         PlayerInfoReq p = new PlayerInfoReq();
                         p.Read(buffer);
                         Console.WriteLine($"PlayerInfoReq: {p.playerId} {p.name}");
+
+                        foreach(PlayerInfoReq.SkillInfo skill in p.skills)
+                        {
+                            Console.WriteLine($"Skill({skill.id} {skill.level} {skill.duration})");
+                        }
                     }
                     break;
             }
