@@ -28,6 +28,20 @@ namespace DummyClient
         {
             ushort count = 0;
 
+            // 유니코드 최대 3byte
+            // ex) 'A' 문자는 UNICODE -> 0x000041
+            //     '!' 문자는 UNICODE -> 0x000021
+            //     'ㅎ' 문자는 UNICODE -> 0x001112
+
+            // 컴퓨터한테 어떻게 알려줄? -> ENCODING
+
+            // UTF-8(외국 문자 우선시) vs UTF-16(c# 캐릭터 타입, c++은 기본 1바이트)
+            // UTF-16을 쓰면 영어 한국어 중걱어 전부 2바이트 사용
+            // UTF-8,, UTF-16를 서버와 클라이언트를 맞춰줘야 통신 문제 없이 가능
+            // ASCII 1바이트
+            // 2048 ~ 65535 3바이트 (한글 같은 경우)
+
+
             //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
             count += 2;
             //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
