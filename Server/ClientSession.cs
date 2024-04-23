@@ -1,6 +1,7 @@
 ﻿using System;
 using ServerCore;
 using System.Net;
+using System.Text;
 
 namespace Server
 {
@@ -17,25 +18,34 @@ namespace Server
     class PlayerInfoReq : Packet
     {
         public long playerId;
+        public string name;
 
         public PlayerInfoReq()
         {
             this.packetId = (ushort)PacketID.PlayerInfoReq;
         }
 
-        public override void Read(ArraySegment<byte> buffer)
+        public override void Read(ArraySegment<byte> segment)
         {
             ushort count = 0;
 
-            //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-            count += 2;
-            //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
-            count += 2;
+            ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 
-            // 패킷 사이즈에 따라 읽는 부분 수정
-            this.playerId = BitConverter.ToInt64(new ReadOnlySpan<byte>(buffer.Array, buffer.Offset + count, buffer.Count - count));
+            //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+            count += sizeof(ushort);
+            //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
+            count += sizeof(ushort);
+
+            this.playerId = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+            count += sizeof(long);
             //BitConverter.ToInt64(buffer.Array, buffer.Offset + count);
-            count += 8;
+
+            // string
+            ushort nameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+            count += sizeof(ushort);
+
+            // byte -> string
+            this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
         }
 
         public override ArraySegment<byte> Write()
@@ -45,15 +55,33 @@ namespace Server
             ushort count = 0;
             bool success = true;
 
-            // TryWriteBytes = 직렬화 함수
+            // 패킷 직렬화
             //success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count), packet.size);
-            count += 2;
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset + count, openSegment.Count - count), this.packetId);
-            count += 2;
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset + count, openSegment.Count - count), this.playerId);
-            count += 8;
+            // Span -> 범위를 지정해서 찝어주는 역활
 
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count), count);
+            Span<byte> s = new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count);
+
+            count += sizeof(ushort); // packet size
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.packetId);
+            count += sizeof(ushort);
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
+            count += sizeof(long);
+
+            // string
+            // NULL, 0x00, 00
+            // C#은 스트링 끝이 null이 아님
+            // 1) string의 길이
+            // 2) byte[] 문자열 보내기
+            // c#은 2바이트므로 Length가 아닌 Encoding.Unicode 사용
+            ushort nameLen = (ushort)Encoding.Unicode.GetByteCount(this.name);
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen);
+            count += sizeof(ushort);
+            // 버퍼에 문자열 복사
+            Array.Copy(Encoding.Unicode.GetBytes(this.name), 0, openSegment.Array, count, nameLen);
+            count += nameLen;
+
+            // 패킷 사이즈
+            success &= BitConverter.TryWriteBytes(s, count);
 
             if (success == false)
                 return null;
@@ -112,7 +140,7 @@ namespace Server
                     {
                         PlayerInfoReq p = new PlayerInfoReq();
                         p.Read(buffer);
-                        Console.WriteLine($"PlayerInfoReq: {p.playerId}");
+                        Console.WriteLine($"PlayerInfoReq: {p.playerId} {p.name}");
                     }
                     break;
             }

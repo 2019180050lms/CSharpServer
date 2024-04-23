@@ -18,39 +18,34 @@ namespace DummyClient
     class PlayerInfoReq : Packet
     {
         public long playerId;
+        public string name;
 
         public PlayerInfoReq()
         {
             this.packetId = (ushort)PacketID.PlayerInfoReq;
         }
 
-        public override void Read(ArraySegment<byte> buffer)
+        public override void Read(ArraySegment<byte> segment)
         {
             ushort count = 0;
 
-            // 유니코드 최대 3byte
-            // ex) 'A' 문자는 UNICODE -> 0x000041
-            //     '!' 문자는 UNICODE -> 0x000021
-            //     'ㅎ' 문자는 UNICODE -> 0x001112
-
-            // 컴퓨터한테 어떻게 알려줄? -> ENCODING
-
-            // UTF-8(외국 문자 우선시) vs UTF-16(c# 캐릭터 타입, c++은 기본 1바이트)
-            // UTF-16을 쓰면 영어 한국어 중걱어 전부 2바이트 사용
-            // UTF-8,, UTF-16를 서버와 클라이언트를 맞춰줘야 통신 문제 없이 가능
-            // ASCII 1바이트
-            // 2048 ~ 65535 3바이트 (한글 같은 경우)
-
+            ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 
             //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-            count += 2;
+            count += sizeof(ushort);
             //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
-            count += 2;
+            count += sizeof(ushort);
 
-            this.playerId = BitConverter.ToInt64(new ReadOnlySpan<byte>(buffer.Array, buffer.Offset + count, buffer.Count - count));
+            this.playerId = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+            count += sizeof(long);
             //BitConverter.ToInt64(buffer.Array, buffer.Offset + count);
 
-            count += 8;
+            // string
+            ushort nameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+            count += sizeof(ushort);
+
+            // byte -> string
+            this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
         }
 
         public override ArraySegment<byte> Write()
@@ -63,13 +58,39 @@ namespace DummyClient
             // 패킷 직렬화
             //success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count), packet.size);
             // Span -> 범위를 지정해서 찝어주는 역활
-            count += 2;
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset + count, openSegment.Count - count), this.packetId);
-            count += 2;
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset + count, openSegment.Count - count), this.playerId);
-            count += 8;
 
-            success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count), (ushort)4);
+            Span<byte> s = new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count);
+
+            count += sizeof(ushort); // packet size
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.packetId);
+            count += sizeof(ushort);
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
+            count += sizeof(long);
+
+            // string
+            // NULL, 0x00, 00
+            // C#은 스트링 끝이 null이 아님
+            // 1) string의 길이
+            // 2) byte[] 문자열 보내기
+            // c#은 2바이트므로 Length가 아닌 Encoding.Unicode 사용
+
+            /*
+            ushort nameLen = (ushort)Encoding.Unicode.GetByteCount(this.name);
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
+            count += sizeof(ushort);
+            // 버퍼에 문자열 복사
+            Array.Copy(Encoding.Unicode.GetBytes(this.name), 0, openSegment.Array, count, nameLen);
+            count += nameLen;
+            */
+
+            // 위와 같음
+            ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, openSegment.Array, openSegment.Offset + count + sizeof(ushort));
+            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
+            count += sizeof(ushort);
+            count += nameLen;
+
+            // 패킷 사이즈
+            success &= BitConverter.TryWriteBytes(s, count);
 
             if (success == false)
                 return null;
@@ -90,7 +111,7 @@ namespace DummyClient
         {
             Console.WriteLine($"OnConnected: {endPoint}");
 
-            PlayerInfoReq packet = new PlayerInfoReq() { playerId = 1001 };
+            PlayerInfoReq packet = new PlayerInfoReq() { playerId = 1001, name = "TEST" };
 
             // Send
             {
