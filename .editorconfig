@@ -26,3 +26,12 @@ dotnet_diagnostic.CS8600.severity = suggestion
 
 # CS8603: 가능한 null 참조 반환입니다.
 dotnet_diagnostic.CS8603.severity = suggestion
+
+# IDE0055: 서식 수정
+dotnet_diagnostic.IDE0055.severity = none
+
+# IDE0090: 'new(...)' 사용
+dotnet_diagnostic.IDE0090.severity = suggestion
+
+# IDE0090: 'new(...)' 사용
+csharp_style_implicit_object_creation_when_type_is_apparent = false

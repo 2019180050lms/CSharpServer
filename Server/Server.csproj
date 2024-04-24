@@ -8,9 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Packet\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Packet\" />
   </ItemGroup>
 </Project>

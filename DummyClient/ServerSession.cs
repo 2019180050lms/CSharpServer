@@ -6,169 +6,22 @@ using System.Text;
 namespace DummyClient
 {
     // Server 통신
-    public abstract class Packet
-    {
-        public ushort size;
-        public ushort packetId;
-
-        public abstract ArraySegment<byte> Write();
-        public abstract void Read(ArraySegment<byte> buffer);
-    }
-
-    class PlayerInfoReq : Packet
-    {
-        public long playerId;
-        public string name;
-
-        public struct SkillInfo
-        {
-            public int id;
-            public short level;
-            public float duration;
-
-            public bool Write(Span<byte> s, ref ushort count)
-            {
-                bool success = true;
-                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.id);
-                count += sizeof(int);
-                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.level);
-                count += sizeof(ushort);
-                success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
-                count += sizeof(float);
-
-                return success;
-            }
-
-            public void Read(ReadOnlySpan<byte> s, ref ushort count)
-            {
-                this.id = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-                count += sizeof(int);
-                this.level = BitConverter.ToInt16(s.Slice(count, s.Length - count));
-                count += sizeof(short);
-                // ToSingle -> float
-                this.duration = BitConverter.ToSingle(s.Slice(count, s.Length - count));
-                count += sizeof(float);
-            }
-        }
-
-        public List<SkillInfo> skills = new List<SkillInfo>();
-
-        public PlayerInfoReq()
-        {
-            this.packetId = (ushort)PacketID.PlayerInfoReq;
-        }
-
-        public override void Read(ArraySegment<byte> segment)
-        {
-            ushort count = 0;
-
-            ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
-
-            //ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-            count += sizeof(ushort);
-            //ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
-            count += sizeof(ushort);
-
-            this.playerId = BitConverter.ToInt64(s.Slice(count, s.Length - count));
-            count += sizeof(long);
-            //BitConverter.ToInt64(buffer.Array, buffer.Offset + count);
-
-            // string
-            ushort nameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-            count += sizeof(ushort);
-
-            // byte -> string
-            this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
-            count += nameLen;
-
-            // skill list
-            skills.Clear();
-            ushort skillLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-            count += sizeof(ushort);
-            for(int i = 0; i<skillLen; ++i)
-            {
-                SkillInfo skill = new SkillInfo();
-                skill.Read(s, ref count);
-                skills.Add(skill);
-            }
-        }
-
-        public override ArraySegment<byte> Write()
-        {
-            ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
-
-            ushort count = 0;
-            bool success = true;
-
-            // 패킷 직렬화
-            //success &= BitConverter.TryWriteBytes(new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count), packet.size);
-            // Span -> 범위를 지정해서 찝어주는 역활
-
-            Span<byte> s = new Span<byte>(openSegment.Array, openSegment.Offset, openSegment.Count);
-
-            count += sizeof(ushort); // packet size
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.packetId);
-            count += sizeof(ushort);
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
-            count += sizeof(long);
-
-            // string
-            // NULL, 0x00, 00
-            // C#은 스트링 끝이 null이 아님
-            // 1) string의 길이
-            // 2) byte[] 문자열 보내기
-            // c#은 2바이트므로 Length가 아닌 Encoding.Unicode 사용
-
-            /*
-            ushort nameLen = (ushort)Encoding.Unicode.GetByteCount(this.name);
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
-            count += sizeof(ushort);
-            // 버퍼에 문자열 복사
-            Array.Copy(Encoding.Unicode.GetBytes(this.name), 0, openSegment.Array, count, nameLen);
-            count += nameLen;
-            */
-
-            // 위와 같음
-            ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, openSegment.Array, openSegment.Offset + count + sizeof(ushort));
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
-            count += sizeof(ushort);
-            count += nameLen;
-
-            // skill list
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)skills.Count);
-            count += sizeof(ushort);
-            foreach(SkillInfo skill in skills)
-            {
-                success &= skill.Write(s, ref count);
-            }
-
-            // 패킷 사이즈
-            success &= BitConverter.TryWriteBytes(s, count);
-
-            if (success == false)
-                return null;
-
-            return SendBufferHelper.Close(count);
-        }
-    }
-
-    public enum PacketID
-    {
-        PlayerInfoReq = 1,
-        PlayerInfoOk = 2,
-    }
-
     class ServerSession : Session
     {
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected: {endPoint}");
 
-            PlayerInfoReq packet = new PlayerInfoReq() { playerId = 1001, name = "TEST" };
-            packet.skills.Add(new PlayerInfoReq.SkillInfo() { id = 101, level = 1, duration = 3.0f });
-            packet.skills.Add(new PlayerInfoReq.SkillInfo() { id = 102, level = 2, duration = 4.0f });
-            packet.skills.Add(new PlayerInfoReq.SkillInfo() { id = 103, level = 3, duration = 5.0f });
-            packet.skills.Add(new PlayerInfoReq.SkillInfo() { id = 104, level = 4, duration = 6.0f });
+            CS_PlayerInfoReq packet = new CS_PlayerInfoReq() { playerId = 1001, name = "TEST" };
+            packet.skills.Add(new CS_PlayerInfoReq.Skill() { id = 101, level = 1, duration = 3.0f });
+
+            var skill = new CS_PlayerInfoReq.Skill() { id = 1001, level = 12, duration = 7.0f };
+            skill.attributes.Add(new CS_PlayerInfoReq.Skill.Attribute() { att = 77 });
+            packet.skills.Add(skill);
+
+            packet.skills.Add(new CS_PlayerInfoReq.Skill() { id = 102, level = 2, duration = 4.0f });
+            packet.skills.Add(new CS_PlayerInfoReq.Skill() { id = 103, level = 3, duration = 5.0f });
+            packet.skills.Add(new CS_PlayerInfoReq.Skill() { id = 104, level = 4, duration = 6.0f });
 
             // Send
             {

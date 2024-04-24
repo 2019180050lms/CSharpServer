@@ -9,6 +9,8 @@ namespace Server
 
         static void Main(string[] args)
         {
+            PacketManager.Instance.Register();
+
             // DNS (Domain Name System)
             // ex) www.naver.com -> 127.0.0.1
             string host = Dns.GetHostName();
