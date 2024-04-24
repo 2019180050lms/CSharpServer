@@ -9,12 +9,28 @@ namespace Server
 		// object mLock = new object();
 		JobQueue mJobQueue = new JobQueue();
 
+		// 패킷 모아 보내기
+		List<ArraySegment<byte>> mPendingList = new List<ArraySegment<byte>>();
+
 		public void Push(Action job)
 		{
 			mJobQueue.Push(job);
 		}
 
-		public void Enter(ClientSession session)
+		public void Flush()
+		{
+            foreach(ClientSession s in mSessions)
+            {
+            	s.Send(mPendingList);
+            }
+
+			Console.WriteLine($"Flushed {mPendingList.Count} items");
+
+			// JobQueue안에서 하나의 쓰레드만 작업을 실행하니 lock 필요 없음
+			mPendingList.Clear();
+        }
+
+        public void Enter(ClientSession session)
 		{
 			//lock (mLock)
 			//{
@@ -42,17 +58,20 @@ namespace Server
 			p.chat = $"{chat}" + $" I am {p.playerId}";
 			ArraySegment<byte> segment = p.Write();
 
-			// 공유 변수 접근 (lock)
-			//lock (mLock)
-			//{
+            // 공유 변수 접근 (lock)
+            //lock (mLock)
+            //{
 
-			// N^2의 시간 복잡도 : 자기 자신한테 보내기 + 모든 유저한테 보내기
-			// -> 패킷 모아서 보내기
-			foreach(ClientSession s in mSessions)
-			{
-				s.Send(segment);
-			}
-			//}
+            // N^2의 시간 복잡도 : 자기 자신한테 보내기 + 모든 유저한테 보내기
+            // -> 패킷 모아서 보내기 / N^2 -> N
+            //foreach(ClientSession s in mSessions)
+            //{
+            //	s.Send(segment);
+            //}
+            //}
+
+            mPendingList.Add(segment);
+
 		}
 
 	}

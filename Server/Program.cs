@@ -18,12 +18,13 @@ namespace Server
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777); // (ip주소, 포트번호) 만들기
 
             // 문지기 생성
-            mListener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+            mListener.Init(endPoint, () => { return SessionManager.Instance.Generate(); }, 10, 200);
             Console.WriteLine("Listening...");
 
             while (true)
             {
-
+                Room.Push(() => Room.Flush());
+                Thread.Sleep(250);
             }
         }
     }
