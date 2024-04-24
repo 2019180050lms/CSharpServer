@@ -35,3 +35,15 @@ dotnet_diagnostic.IDE0090.severity = suggestion
 
 # IDE0090: 'new(...)' 사용
 csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# IDE0044: 읽기 전용 한정자 추가
+dotnet_diagnostic.IDE0044.severity = suggestion
+
+# IDE0040: 접근성 한정자 추가
+dotnet_diagnostic.IDE0040.severity = suggestion
+
+# IDE0011: 중괄호 추가
+dotnet_diagnostic.IDE0011.severity = suggestion
+
+# IDE0011: 중괄호 추가
+csharp_prefer_braces = false

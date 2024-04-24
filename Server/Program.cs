@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using ServerCore;
 
 namespace Server
@@ -20,7 +21,8 @@ namespace Server
             // ex) www.naver.com -> 127.0.0.1
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
+            //IPAddress ipAddr = ipHost.AddressList[0];
+            IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777); // (ip주소, 포트번호) 만들기
 
             // 문지기 생성
