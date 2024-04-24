@@ -57,6 +57,15 @@ namespace ServerCore
 		public abstract int OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
 
+		void Clear()
+		{
+			lock (mLock)
+			{
+				mSendQueue.Clear();
+				mPendinglist.Clear();
+			}
+		}
+
         public void Start(Socket socket)
 		{
 			mSocket = socket;
@@ -84,12 +93,16 @@ namespace ServerCore
 			OnDisconnected(mSocket.RemoteEndPoint);
             mSocket.Shutdown(SocketShutdown.Both); // 연결 종료 전 알림 [옵션]
             mSocket.Close();
+			Clear();
         }
 
         #region 네트워크 통신
 
 		void RegisterSend()
 		{
+			if (mDisconnected == 1)
+				return;
+
 			while(mSendQueue.Count > 0)
             {
                 ArraySegment<byte> buff = mSendQueue.Dequeue();
@@ -97,9 +110,16 @@ namespace ServerCore
             }
 			mSendArgs.BufferList = mPendinglist;
 
-            bool pending = mSocket.SendAsync(mSendArgs);
-			if (pending == false)
-				OnSendCompleted(null, mSendArgs);
+			try
+			{
+                bool pending = mSocket.SendAsync(mSendArgs);
+                if (pending == false)
+                    OnSendCompleted(null, mSendArgs);
+            }
+			catch (Exception e)
+			{
+				Console.WriteLine($"RegisterSend Failed {e}");
+			}
 		}
 
 		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
@@ -132,13 +152,23 @@ namespace ServerCore
 
         void RegisterRecv()
 		{
+			if (mDisconnected == 1)
+				return;
+
 			mRecvBuffer.Clean();
 			ArraySegment<byte> segment = mRecvBuffer.WriteSegment;
 			mRecvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
 
-			bool pending = mSocket.ReceiveAsync(mRecvArgs);
-			if (pending == false)
-				OnRecvCompleted(null, mRecvArgs);
+			try
+			{
+                bool pending = mSocket.ReceiveAsync(mRecvArgs);
+                if (pending == false)
+                    OnRecvCompleted(null, mRecvArgs);
+            }
+			catch(Exception e)
+			{
+				Console.WriteLine($"RegisterRecv Failed {e}");
+			}
 		}
 
 		void OnRecvCompleted(object sender, SocketAsyncEventArgs args)

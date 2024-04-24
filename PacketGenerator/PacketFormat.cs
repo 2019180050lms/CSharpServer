@@ -11,17 +11,14 @@ using ServerCore;
 class PacketManager
 {{
     #region Singleton
-    static PacketManager mInstance;
-	public static PacketManager Instance
-	{{
-		get
-		{{
-			if (mInstance == null)
-				mInstance = new PacketManager();
-			return mInstance;
-		}}
-	}}
-	#endregion
+    static PacketManager mInstance = new PacketManager();
+    public static PacketManager Instance {{ get {{ return mInstance; }} }}
+    #endregion
+
+    PacketManager()
+    {{
+        Register();
+    }}
 
 	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> mOnRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
 	Dictionary<ushort, Action<PacketSession, IPacket>> mHandler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
@@ -216,7 +213,7 @@ count += sizeof({1});";
         // {0} 변수 이름
         public static string writeStringFormat =
 @"ushort {0}Len = (ushort)Encoding.Unicode.GetBytes(this.{0}, 0, this.{0}.Length, openSegment.Array, openSegment.Offset + count + sizeof(ushort));
-success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen); // (ushort)993);
+success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), {0}Len); // (ushort)993);
 count += sizeof(ushort);
 count += {0}Len;";
 

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Packet\" />
+    <None Remove="Session\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
@@ -18,5 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Packet\" />
+    <Folder Include="Session\" />
   </ItemGroup>
 </Project>

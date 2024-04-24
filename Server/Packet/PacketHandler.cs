@@ -1,9 +1,21 @@
-﻿using System;
+﻿using Server;
 using ServerCore;
-
 
 class PacketHandler
 {
+    public static void CS_ChatHandler(PacketSession session, IPacket packet)
+    {
+        CS_Chat p = packet as CS_Chat;
+        ClientSession clientSession = session as ClientSession;
+
+        if (clientSession.Room == null)
+            return;
+
+        GameRoom room = clientSession.Room;
+        room.Push(() => room.Broadcast(clientSession, p.chat));
+        // clientSession.Room.Broadcast(clientSession, p.chat);
+    }
+
     public static void CS_PlayerInfoReqHandler(PacketSession session, IPacket packet)
     {
         CS_PlayerInfoReq p = packet as CS_PlayerInfoReq;

@@ -1,0 +1,7 @@
+#!/bin/bash
+open ../PacketGenerator/bin/PacketGenerator.exe ../../PacketGenerator/PDL.xml
+
+find . -type f -mtime -3 | rsync -avz --files-from=- ../PacketGenerator/bin/GenPackets.cs ../../DummyClient/Packet
+find . -type f -mtime -3 | rsync -avz --files-from=- ../PacketGenerator/bin/GenPackets.cs ../../Server/Packet
+find . -type f -mtime -3 | rsync -avz --files-from=- ../PacketGenerator/bin/ClientPacketManager.cs ../../DummyClient/Packet
+find . -type f -mtime -3 | rsync -avz --files-from=- ../PacketGenerator/bin/ServerPacketManager.cs ../../Server/Packet

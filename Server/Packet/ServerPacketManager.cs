@@ -4,23 +4,22 @@ using ServerCore;
 class PacketManager
 {
     #region Singleton
-    static PacketManager mInstance;
-    public static PacketManager Instance
-    {
-        get
-        {
-            if (mInstance == null)
-                mInstance = new PacketManager();
-            return mInstance;
-        }
-    }
+    static PacketManager mInstance = new PacketManager();
+    public static PacketManager Instance { get { return mInstance; } }
     #endregion
+
+    PacketManager()
+    {
+        Register();
+    }
 
     Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> mOnRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
     Dictionary<ushort, Action<PacketSession, IPacket>> mHandler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
 
     public void Register()
     {
+        mOnRecv.Add((ushort)PacketID.CS_Chat, MakePacket<CS_Chat>);
+        mHandler.Add((ushort)PacketID.CS_Chat, PacketHandler.CS_ChatHandler);
         mOnRecv.Add((ushort)PacketID.CS_PlayerInfoReq, MakePacket<CS_PlayerInfoReq>);
         mHandler.Add((ushort)PacketID.CS_PlayerInfoReq, PacketHandler.CS_PlayerInfoReqHandler);
 

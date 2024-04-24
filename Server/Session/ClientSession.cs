@@ -8,6 +8,9 @@ namespace Server
     // Client 통신
     class ClientSession : PacketSession
     {
+        public int SessionId { get; set; }
+        public GameRoom Room { get; set; }
+
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected: {endPoint}");
@@ -26,12 +29,21 @@ namespace Server
             Send(sendBuff);
             */
 
-            Thread.Sleep(1000);
-            Disconnect();
+            Program.Room.Push(() => Program.Room.Enter(this));
+            // Program.Room.Enter(this);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
         {
+            SessionManager.Instance.Remove(this);
+            if(Room != null)
+            {
+                GameRoom room = Room;
+                room.Push(() => room.Leave(this));
+                // Room.Leave(this);
+                Room = null;
+            }
+
             Console.WriteLine($"OnDisconnected: {endPoint}");
         }
 
@@ -42,7 +54,7 @@ namespace Server
 
         public override int OnSend(int numOfBytes)
         {
-            Console.WriteLine($"Transferred bytes: {numOfBytes}");
+            // Console.WriteLine($"Transferred bytes: {numOfBytes}");
             return numOfBytes;
         }
     }
