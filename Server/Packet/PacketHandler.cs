@@ -3,28 +3,30 @@ using ServerCore;
 
 class PacketHandler
 {
-    public static void CS_ChatHandler(PacketSession session, IPacket packet)
+    public static void CS_LeaveGameHandler(PacketSession session, IPacket packet)
     {
-        CS_Chat p = packet as CS_Chat;
         ClientSession clientSession = session as ClientSession;
 
         if (clientSession.Room == null)
             return;
 
         GameRoom room = clientSession.Room;
-        room.Push(() => room.Broadcast(clientSession, p.chat));
+        room.Push(() => room.Leave(clientSession));
         // clientSession.Room.Broadcast(clientSession, p.chat);
     }
 
-    public static void CS_PlayerInfoReqHandler(PacketSession session, IPacket packet)
+    public static void CS_MoveHandler(PacketSession session, IPacket packet)
     {
-        CS_PlayerInfoReq p = packet as CS_PlayerInfoReq;
+        CS_Move p = packet as CS_Move;
+        ClientSession clientSession = session as ClientSession;
 
-        Console.WriteLine($"PlayerInfoReq: {p.playerId} {p.name}");
+        if (clientSession.Room == null)
+            return;
 
-        foreach (CS_PlayerInfoReq.Skill skill in p.skills)
-        {
-            Console.WriteLine($"Skill({skill.id} {skill.level} {skill.duration})");
-        }
+        // Console.WriteLine($"{p.posX}, {p.posY}, {p.posZ}");
+
+        GameRoom room = clientSession.Room;
+        room.Push(() => room.Move(clientSession, p));
+        // clientSession.Room.Broadcast(clientSession, p.chat);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using ServerCore;
 
-class PacketManager
+public class PacketManager
 {
     #region Singleton
     static PacketManager mInstance = new PacketManager();
@@ -18,10 +18,10 @@ class PacketManager
 
     public void Register()
     {
-        mMakeFunc.Add((ushort)PacketID.CS_Chat, MakePacket<CS_Chat>);
-        mHandler.Add((ushort)PacketID.CS_Chat, PacketHandler.CS_ChatHandler);
-        mMakeFunc.Add((ushort)PacketID.CS_PlayerInfoReq, MakePacket<CS_PlayerInfoReq>);
-        mHandler.Add((ushort)PacketID.CS_PlayerInfoReq, PacketHandler.CS_PlayerInfoReqHandler);
+        mMakeFunc.Add((ushort)PacketID.CS_LeaveGame, MakePacket<CS_LeaveGame>);
+        mHandler.Add((ushort)PacketID.CS_LeaveGame, PacketHandler.CS_LeaveGameHandler);
+        mMakeFunc.Add((ushort)PacketID.CS_Move, MakePacket<CS_Move>);
+        mHandler.Add((ushort)PacketID.CS_Move, PacketHandler.CS_MoveHandler);
 
     }
 
