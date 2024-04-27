@@ -16,4 +16,7 @@
   <ItemGroup>
     <Folder Include="Packet\" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.12.3" />
+  </ItemGroup>
 </Project>

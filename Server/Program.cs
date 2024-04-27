@@ -1,22 +1,37 @@
 ﻿using System.Net;
 using System.Text;
+using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using ServerCore;
+using static Google.Protobuf.Protocol.Person.Types;
 
 namespace Server
 {
     class Program
     {
         static Listener mListener = new Listener();
-        public static GameRoom Room = new GameRoom();
 
         static void FlushRoom()
         {
-            Room.Push(() => Room.Flush());
             JobTimer.Instance.Push(FlushRoom, 250);
         }
 
         static void Main(string[] args)
         {
+            Person person = new Person()
+            {
+                Name = "Test",
+                Id = 123,
+                Email = "test@naver.com",
+                Phones = { new PhoneNumber { Number = "555-4321", Type = PhoneType.Home } },
+            };
+
+            int size = person.CalculateSize();
+            byte[] sendBuffer = person.ToByteArray();
+
+            Person person2 = new Person();
+            person2.MergeFrom(sendBuffer);
+
             // DNS (Domain Name System)
             // ex) www.naver.com -> 127.0.0.1
             string host = Dns.GetHostName();
