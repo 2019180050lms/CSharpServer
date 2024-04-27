@@ -18,14 +18,9 @@
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Packet\" />
     <Folder Include="Session\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Packet\PacketHandler.cs" />
-    <Compile Remove="Packet\ServerPacketManager.cs" />
   </ItemGroup>
 </Project>

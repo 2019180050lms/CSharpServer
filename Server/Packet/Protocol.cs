@@ -25,25 +25,24 @@ namespace Google.Protobuf.Protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cg5Qcm90b2NvbC5wcm90bxIIUHJvdG9jb2waH2dvb2dsZS9wcm90b2J1Zi90",
-            "aW1lc3RhbXAucHJvdG8iGQoGQ19DaGF0Eg8KB2NvbnRleHQYASABKAkiGQoG",
-            "U19DaGF0Eg8KB2NvbnRleHQYASABKAkiHgoLU19FbnRlckdhbWUSDwoHY29u",
-            "dGV4dBgBIAEoCSKdAgoGUGVyc29uEhQKDHBhY2tldEhlYWRlchgBIAEoBRIM",
-            "CgRuYW1lGAIgASgJEgoKAmlkGAMgASgFEg0KBWVtYWlsGAQgASgJEiwKBnBo",
-            "b25lcxgFIAMoCzIcLlByb3RvY29sLlBlcnNvbi5QaG9uZU51bWJlchIwCgxs",
-            "YXN0X3VwZGF0ZWQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w",
-            "GkcKC1Bob25lTnVtYmVyEg4KBm51bWJlchgBIAEoCRIoCgR0eXBlGAIgASgO",
-            "MhouUHJvdG9jb2wuUGVyc29uLlBob25lVHlwZSIrCglQaG9uZVR5cGUSCgoG",
-            "TU9CSUxFEAASCAoESE9NRRABEggKBFdPUksQAiIvCgtBZGRyZXNzQm9vaxIg",
-            "CgZwZW9wbGUYASADKAsyEC5Qcm90b2NvbC5QZXJzb24qPQoFTXNnSWQSCgoG",
-            "UEVSU09OEAASCgoGQ19DSEFUEAESCgoGU19DSEFUEAISEAoMU19FTlRFUl9H",
-            "QU1FEANCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "aW1lc3RhbXAucHJvdG8iGgoHQ1NfQ2hhdBIPCgdjb250ZXh0GAEgASgJIhoK",
+            "B1NDX0NoYXQSDwoHY29udGV4dBgBIAEoCSIfCgxTQ19FbnRlckdhbWUSDwoH",
+            "Y29udGV4dBgBIAEoCSLrAQoGUGVyc29uEhQKDHBhY2tldEhlYWRlchgBIAEo",
+            "BRIMCgRuYW1lGAIgASgJEgoKAmlkGAMgASgFEg0KBWVtYWlsGAQgASgJEiwK",
+            "BnBob25lcxgFIAMoCzIcLlByb3RvY29sLlBlcnNvbi5QaG9uZU51bWJlchpH",
+            "CgtQaG9uZU51bWJlchIOCgZudW1iZXIYASABKAkSKAoEdHlwZRgCIAEoDjIa",
+            "LlByb3RvY29sLlBlcnNvbi5QaG9uZVR5cGUiKwoJUGhvbmVUeXBlEgoKBk1P",
+            "QklMRRAAEggKBEhPTUUQARIICgRXT1JLEAIiLwoLQWRkcmVzc0Jvb2sSIAoG",
+            "cGVvcGxlGAEgAygLMhAuUHJvdG9jb2wuUGVyc29uKkAKBU1zZ0lkEgoKBlBF",
+            "UlNPThAAEgsKB0NTX0NIQVQQARILCgdTQ19DSEFUEAISEQoNU0NfRU5URVJf",
+            "R0FNRRADQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Chat), global::Google.Protobuf.Protocol.C_Chat.Parser, new[]{ "Context" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Chat), global::Google.Protobuf.Protocol.S_Chat.Parser, new[]{ "Context" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EnterGame), global::Google.Protobuf.Protocol.S_EnterGame.Parser, new[]{ "Context" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Person), global::Google.Protobuf.Protocol.Person.Parser, new[]{ "PacketHeader", "Name", "Id", "Email", "Phones", "LastUpdated" }, null, new[]{ typeof(global::Google.Protobuf.Protocol.Person.Types.PhoneType) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Person.Types.PhoneNumber), global::Google.Protobuf.Protocol.Person.Types.PhoneNumber.Parser, new[]{ "Number", "Type" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CS_Chat), global::Google.Protobuf.Protocol.CS_Chat.Parser, new[]{ "Context" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.SC_Chat), global::Google.Protobuf.Protocol.SC_Chat.Parser, new[]{ "Context" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.SC_EnterGame), global::Google.Protobuf.Protocol.SC_EnterGame.Parser, new[]{ "Context" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Person), global::Google.Protobuf.Protocol.Person.Parser, new[]{ "PacketHeader", "Name", "Id", "Email", "Phones" }, null, new[]{ typeof(global::Google.Protobuf.Protocol.Person.Types.PhoneType) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.Person.Types.PhoneNumber), global::Google.Protobuf.Protocol.Person.Types.PhoneNumber.Parser, new[]{ "Number", "Type" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.AddressBook), global::Google.Protobuf.Protocol.AddressBook.Parser, new[]{ "People" }, null, null, null, null)
           }));
     }
@@ -53,19 +52,19 @@ namespace Google.Protobuf.Protocol {
   #region Enums
   public enum MsgId {
     [pbr::OriginalName("PERSON")] Person = 0,
-    [pbr::OriginalName("C_CHAT")] CChat = 1,
-    [pbr::OriginalName("S_CHAT")] SChat = 2,
-    [pbr::OriginalName("S_ENTER_GAME")] SEnterGame = 3,
+    [pbr::OriginalName("CS_CHAT")] CsChat = 1,
+    [pbr::OriginalName("SC_CHAT")] ScChat = 2,
+    [pbr::OriginalName("SC_ENTER_GAME")] ScEnterGame = 3,
   }
 
   #endregion
 
   #region Messages
-  public sealed partial class C_Chat : pb::IMessage<C_Chat> {
-    private static readonly pb::MessageParser<C_Chat> _parser = new pb::MessageParser<C_Chat>(() => new C_Chat());
+  public sealed partial class CS_Chat : pb::IMessage<CS_Chat> {
+    private static readonly pb::MessageParser<CS_Chat> _parser = new pb::MessageParser<CS_Chat>(() => new CS_Chat());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<C_Chat> Parser { get { return _parser; } }
+    public static pb::MessageParser<CS_Chat> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -78,21 +77,21 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Chat() {
+    public CS_Chat() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Chat(C_Chat other) : this() {
+    public CS_Chat(CS_Chat other) : this() {
       context_ = other.context_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_Chat Clone() {
-      return new C_Chat(this);
+    public CS_Chat Clone() {
+      return new CS_Chat(this);
     }
 
     /// <summary>Field number for the "context" field.</summary>
@@ -108,11 +107,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as C_Chat);
+      return Equals(other as CS_Chat);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(C_Chat other) {
+    public bool Equals(CS_Chat other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -162,7 +161,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(C_Chat other) {
+    public void MergeFrom(CS_Chat other) {
       if (other == null) {
         return;
       }
@@ -190,11 +189,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class S_Chat : pb::IMessage<S_Chat> {
-    private static readonly pb::MessageParser<S_Chat> _parser = new pb::MessageParser<S_Chat>(() => new S_Chat());
+  public sealed partial class SC_Chat : pb::IMessage<SC_Chat> {
+    private static readonly pb::MessageParser<SC_Chat> _parser = new pb::MessageParser<SC_Chat>(() => new SC_Chat());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<S_Chat> Parser { get { return _parser; } }
+    public static pb::MessageParser<SC_Chat> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -207,21 +206,21 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_Chat() {
+    public SC_Chat() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_Chat(S_Chat other) : this() {
+    public SC_Chat(SC_Chat other) : this() {
       context_ = other.context_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_Chat Clone() {
-      return new S_Chat(this);
+    public SC_Chat Clone() {
+      return new SC_Chat(this);
     }
 
     /// <summary>Field number for the "context" field.</summary>
@@ -237,11 +236,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as S_Chat);
+      return Equals(other as SC_Chat);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(S_Chat other) {
+    public bool Equals(SC_Chat other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -291,7 +290,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(S_Chat other) {
+    public void MergeFrom(SC_Chat other) {
       if (other == null) {
         return;
       }
@@ -319,11 +318,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class S_EnterGame : pb::IMessage<S_EnterGame> {
-    private static readonly pb::MessageParser<S_EnterGame> _parser = new pb::MessageParser<S_EnterGame>(() => new S_EnterGame());
+  public sealed partial class SC_EnterGame : pb::IMessage<SC_EnterGame> {
+    private static readonly pb::MessageParser<SC_EnterGame> _parser = new pb::MessageParser<SC_EnterGame>(() => new SC_EnterGame());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<S_EnterGame> Parser { get { return _parser; } }
+    public static pb::MessageParser<SC_EnterGame> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -336,21 +335,21 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EnterGame() {
+    public SC_EnterGame() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EnterGame(S_EnterGame other) : this() {
+    public SC_EnterGame(SC_EnterGame other) : this() {
       context_ = other.context_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EnterGame Clone() {
-      return new S_EnterGame(this);
+    public SC_EnterGame Clone() {
+      return new SC_EnterGame(this);
     }
 
     /// <summary>Field number for the "context" field.</summary>
@@ -366,11 +365,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as S_EnterGame);
+      return Equals(other as SC_EnterGame);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(S_EnterGame other) {
+    public bool Equals(SC_EnterGame other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -420,7 +419,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(S_EnterGame other) {
+    public void MergeFrom(SC_EnterGame other) {
       if (other == null) {
         return;
       }
@@ -478,7 +477,6 @@ namespace Google.Protobuf.Protocol {
       id_ = other.id_;
       email_ = other.email_;
       phones_ = other.phones_.Clone();
-      lastUpdated_ = other.lastUpdated_ != null ? other.lastUpdated_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -539,20 +537,12 @@ namespace Google.Protobuf.Protocol {
     private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.Person.Types.PhoneNumber> _repeated_phones_codec
         = pb::FieldCodec.ForMessage(42, global::Google.Protobuf.Protocol.Person.Types.PhoneNumber.Parser);
     private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.Person.Types.PhoneNumber> phones_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.Person.Types.PhoneNumber>();
+    /// <summary>
+    ///google.protobuf.Timestamp last_updated = 6;
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::Google.Protobuf.Protocol.Person.Types.PhoneNumber> Phones {
       get { return phones_; }
-    }
-
-    /// <summary>Field number for the "last_updated" field.</summary>
-    public const int LastUpdatedFieldNumber = 6;
-    private global::Google.Protobuf.WellKnownTypes.Timestamp lastUpdated_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp LastUpdated {
-      get { return lastUpdated_; }
-      set {
-        lastUpdated_ = value;
-      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -573,7 +563,6 @@ namespace Google.Protobuf.Protocol {
       if (Id != other.Id) return false;
       if (Email != other.Email) return false;
       if(!phones_.Equals(other.phones_)) return false;
-      if (!object.Equals(LastUpdated, other.LastUpdated)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -585,7 +574,6 @@ namespace Google.Protobuf.Protocol {
       if (Id != 0) hash ^= Id.GetHashCode();
       if (Email.Length != 0) hash ^= Email.GetHashCode();
       hash ^= phones_.GetHashCode();
-      if (lastUpdated_ != null) hash ^= LastUpdated.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -616,10 +604,6 @@ namespace Google.Protobuf.Protocol {
         output.WriteString(Email);
       }
       phones_.WriteTo(output, _repeated_phones_codec);
-      if (lastUpdated_ != null) {
-        output.WriteRawTag(50);
-        output.WriteMessage(LastUpdated);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -641,9 +625,6 @@ namespace Google.Protobuf.Protocol {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
       }
       size += phones_.CalculateSize(_repeated_phones_codec);
-      if (lastUpdated_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(LastUpdated);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -668,12 +649,6 @@ namespace Google.Protobuf.Protocol {
         Email = other.Email;
       }
       phones_.Add(other.phones_);
-      if (other.lastUpdated_ != null) {
-        if (lastUpdated_ == null) {
-          LastUpdated = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-        }
-        LastUpdated.MergeFrom(other.LastUpdated);
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -703,13 +678,6 @@ namespace Google.Protobuf.Protocol {
           }
           case 42: {
             phones_.AddEntriesFrom(input, _repeated_phones_codec);
-            break;
-          }
-          case 50: {
-            if (lastUpdated_ == null) {
-              LastUpdated = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-            }
-            input.ReadMessage(LastUpdated);
             break;
           }
         }

@@ -21,8 +21,10 @@ public class PacketManager
 
 	public void Register()
 	{        
-		mOnRecv.Add((ushort)MsgId.CsChat, MakePacket<CS_Chat>);
-        mHandler.Add((ushort)MsgId.CsChat, PacketHandler.CS_ChatHandler);
+		mOnRecv.Add((ushort)MsgId.ScChat, MakePacket<SC_Chat>);
+        mHandler.Add((ushort)MsgId.ScChat, PacketHandler.SC_ChatHandler);        
+		mOnRecv.Add((ushort)MsgId.ScEnterGame, MakePacket<SC_EnterGame>);
+        mHandler.Add((ushort)MsgId.ScEnterGame, PacketHandler.SC_EnterGameHandler);
 	}
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

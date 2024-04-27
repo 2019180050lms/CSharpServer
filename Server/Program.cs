@@ -18,20 +18,6 @@ namespace Server
 
         static void Main(string[] args)
         {
-            Person person = new Person()
-            {
-                Name = "Test",
-                Id = 123,
-                Email = "test@naver.com",
-                Phones = { new PhoneNumber { Number = "555-4321", Type = PhoneType.Home } },
-            };
-
-            int size = person.CalculateSize();
-            byte[] sendBuffer = person.ToByteArray();
-
-            Person person2 = new Person();
-            person2.MergeFrom(sendBuffer);
-
             // DNS (Domain Name System)
             // ex) www.naver.com -> 127.0.0.1
             string host = Dns.GetHostName();
