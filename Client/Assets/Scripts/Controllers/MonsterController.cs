@@ -158,7 +158,7 @@ public class MonsterController : CreatureController
     {
         mAnimator.Play("DEAD");
 
-        Managers.Object.Remove(gameObject);
+        Managers.Object.Remove(Id);
         Managers.Resource.Destroy(gameObject, 2f);
     }
 

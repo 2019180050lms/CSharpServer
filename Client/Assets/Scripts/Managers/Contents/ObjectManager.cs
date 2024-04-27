@@ -1,27 +1,63 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class ObjectManager
 {
-    //Dictionary<int, GameObject> mObjects = new Dictionary<int, GameObject>();
-    List<GameObject> mObjects = new List<GameObject>();
+    public MyPlayerController MyPlayer { get; set; }
+    Dictionary<int, GameObject> mObjects = new Dictionary<int, GameObject>();
 
-    public void Add(GameObject go)
+
+    public void Add(PlayerInfo info, bool myPlayer = false)
     {
-        mObjects.Add(go);
+        if (myPlayer)
+        {
+            GameObject go = Managers.Resource.Instantiate("Creature/MyPlayer");
+            go.name = info.Name;
+            mObjects.Add(info.PlayerId, go);
+
+            MyPlayer = go.GetComponent<MyPlayerController>();
+            MyPlayer.Id = info.PlayerId;
+            MyPlayer.CellPos = new Vector3Int(info.PosX, info.PosY, info.PosZ);
+            MyPlayer.transform.rotation = Quaternion.Euler(info.RotX, info.RotY, info.RotZ);
+        }
+        else
+        {
+            GameObject go = Managers.Resource.Instantiate("Creature/Player");
+            go.name = info.Name;
+            mObjects.Add(info.PlayerId, go);
+
+            PlayerController pc = go.GetComponent<PlayerController>();
+            pc.Id = info.PlayerId;
+            pc.CellPos = new Vector3Int(info.PosX, info.PosY, info.PosZ);
+            pc.transform.rotation = Quaternion.Euler(info.RotX, info.RotY, info.RotZ);
+        }
+    }
+    public void Add(int id, GameObject go)
+    {
+        mObjects.Add(id, go);
     }
 
-    public void Remove(GameObject go)
+    public void Remove(int id)
     {
-        mObjects.Remove(go);
+        mObjects.Remove(id);
+    }
+
+    public void RemoveMyPlayer()
+    {
+        if (MyPlayer == null)
+            return;
+
+        Remove(MyPlayer.Id);
+        MyPlayer = null;
     }
 
     public GameObject Find(Vector3Int cellPos)
     {
         // BigO(N)
-        foreach(GameObject obj in mObjects)
+        foreach(GameObject obj in mObjects.Values)
         {
             CreatureController cc = obj.GetComponent<CreatureController>();
             if (cc == null)
@@ -37,7 +73,7 @@ public class ObjectManager
     public GameObject Find(Func<GameObject, bool> condition)
     {
         // BigO(N)
-        foreach (GameObject obj in mObjects)
+        foreach (GameObject obj in mObjects.Values)
         {
             if (condition.Invoke(obj))
                 return obj;
