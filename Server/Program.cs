@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Server.Game;
 using ServerCore;
 
 namespace Server
@@ -14,6 +15,8 @@ namespace Server
 
         static void Main(string[] args)
         {
+            RoomManager.Instance.Add();
+
             // DNS (Domain Name System)
             // ex) www.naver.com -> 127.0.0.1
             string host = Dns.GetHostName();

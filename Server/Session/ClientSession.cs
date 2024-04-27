@@ -3,12 +3,14 @@ using ServerCore;
 using System.Net;
 using Google.Protobuf.Protocol;
 using Google.Protobuf;
+using Server.Game;
 
 namespace Server
 {
     // Client 통신
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
+        public Player MyPlayer { get; set; }
         public int SessionId { get; set; }
 
         public void Send(IMessage packet)
@@ -19,7 +21,7 @@ namespace Server
 
             ushort size = (ushort)packet.CalculateSize();
             byte[] sendBuffer = new byte[size + 4];
-            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            Array.Copy(BitConverter.GetBytes((ushort)(size + 4)), 0, sendBuffer, 0, sizeof(ushort));
             Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
             Array.Copy(packet.ToByteArray(), 0, sendBuffer, 4, size);
 
@@ -30,30 +32,18 @@ namespace Server
         {
             Console.WriteLine($"OnConnected: {endPoint}");
 
-            /*
-            Packet packet = new Packet() { size = 100, packetId = 10 };
+            // 플레이어 생성
+            MyPlayer = PlayerManager.Instance.Add();
+            MyPlayer.Info.Name = $"Player_{MyPlayer.Info.PlayerId}";
+            MyPlayer.Info.PosX = 0;
+            MyPlayer.Info.PosY = 0;
+            MyPlayer.Info.PosZ = 0;
+            MyPlayer.Info.RotX = 40;
+            MyPlayer.Info.RotY = 0;
+            MyPlayer.Info.RotZ = 0;
+            MyPlayer.Session = this;
 
-            // Send
-            ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
-            byte[] buffer1 = BitConverter.GetBytes(packet.size);
-            byte[] buffer2 = BitConverter.GetBytes(packet.packetId);
-            Array.Copy(buffer1, 0, openSegment.Array, openSegment.Offset, buffer1.Length);
-            Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer1.Length, buffer2.Length);
-            ArraySegment<byte> sendBuff = SendBufferHelper.Close(buffer1.Length + buffer2.Length);
-
-            Send(sendBuff);
-            */
-
-            //Program.Room.Push(() => Program.Room.Enter(this));
-            // Program.Room.Enter(this);
-
-            SC_Chat chat = new SC_Chat()
-            {
-                Context = "안녕하세요"
-            };
-
-            
-            Send(chat);
+            RoomManager.Instance.Find(1).EnterGame(MyPlayer);
         }
 
         public override void OnDisconnected(EndPoint endPoint)

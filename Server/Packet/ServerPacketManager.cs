@@ -1,6 +1,8 @@
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using System;
+using System.Collections.Generic;
 
 public class PacketManager
 {
@@ -19,8 +21,8 @@ public class PacketManager
 
 	public void Register()
 	{        
-		mOnRecv.Add((ushort)MsgId.CsChat, MakePacket<CS_Chat>);
-        mHandler.Add((ushort)MsgId.CsChat, PacketHandler.CS_ChatHandler);
+		mOnRecv.Add((ushort)MsgId.CsMove, MakePacket<CS_Move>);
+        mHandler.Add((ushort)MsgId.CsMove, PacketHandler.CS_MoveHandler);
 	}
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
