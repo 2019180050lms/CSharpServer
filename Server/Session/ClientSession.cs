@@ -35,12 +35,14 @@ namespace Server
             // 플레이어 생성
             MyPlayer = PlayerManager.Instance.Add();
             MyPlayer.Info.Name = $"Player_{MyPlayer.Info.PlayerId}";
-            MyPlayer.Info.PosX = 0;
-            MyPlayer.Info.PosY = 0;
-            MyPlayer.Info.PosZ = 0;
-            MyPlayer.Info.RotX = 40;
-            MyPlayer.Info.RotY = 0;
-            MyPlayer.Info.RotZ = 0;
+            MyPlayer.Info.PosInfo.State = CreatureState.Idle;
+            MyPlayer.Info.PosInfo.MoveDir = MoveDir.None;
+            MyPlayer.Info.PosInfo.PosX = 0;
+            MyPlayer.Info.PosInfo.PosY = 0;
+            MyPlayer.Info.PosInfo.PosZ = 0;
+            MyPlayer.Info.PosInfo.RotX = 0;
+            MyPlayer.Info.PosInfo.RotY = 40;
+            MyPlayer.Info.PosInfo.RotZ = 0;
             MyPlayer.Session = this;
 
             RoomManager.Instance.Find(1).EnterGame(MyPlayer);

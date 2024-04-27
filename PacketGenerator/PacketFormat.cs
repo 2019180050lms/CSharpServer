@@ -26,7 +26,7 @@ public class PacketManager
     Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> mOnRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
 	Dictionary<ushort, Action<PacketSession, IMessage>> mHandler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
 
-	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
+	public Action<PacketSession, IMessage, ushort> CustomHandler {{ get; set; }}
 
 	public void Register()
 	{{{0}
