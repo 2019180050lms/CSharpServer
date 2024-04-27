@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ServerCore
 {
 	public interface IJobQueue

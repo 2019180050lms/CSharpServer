@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace ServerCore
 {
 	public class RecvBuffer

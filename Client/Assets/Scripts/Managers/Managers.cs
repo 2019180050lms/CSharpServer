@@ -10,25 +10,27 @@ public class Managers : MonoBehaviour
     #region Contents
     MapManager mMap = new MapManager();
     ObjectManager mObj = new ObjectManager();
+    NetworkManager mNetwork = new NetworkManager();
 
     public static MapManager Map { get { return Instance.mMap; } }
     public static ObjectManager Object { get { return Instance.mObj; } }
+    public static NetworkManager Network { get { return Instance.mNetwork; } }
 	#endregion
 
 	#region Core
-	DataManager _data = new DataManager();
-    PoolManager _pool = new PoolManager();
-    ResourceManager _resource = new ResourceManager();
-    SceneManagerEx _scene = new SceneManagerEx();
-    SoundManager _sound = new SoundManager();
-    UIManager _ui = new UIManager();
+	DataManager mData = new DataManager();
+    PoolManager mPool = new PoolManager();
+    ResourceManager mResource = new ResourceManager();
+    SceneManagerEx mScene = new SceneManagerEx();
+    SoundManager mSound = new SoundManager();
+    UIManager mUI = new UIManager();
 
-    public static DataManager Data { get { return Instance._data; } }
-    public static PoolManager Pool { get { return Instance._pool; } }
-    public static ResourceManager Resource { get { return Instance._resource; } }
-    public static SceneManagerEx Scene { get { return Instance._scene; } }
-    public static SoundManager Sound { get { return Instance._sound; } }
-    public static UIManager UI { get { return Instance._ui; } }
+    public static DataManager Data { get { return Instance.mData; } }
+    public static PoolManager Pool { get { return Instance.mPool; } }
+    public static ResourceManager Resource { get { return Instance.mResource; } }
+    public static SceneManagerEx Scene { get { return Instance.mScene; } }
+    public static SoundManager Sound { get { return Instance.mSound; } }
+    public static UIManager UI { get { return Instance.mUI; } }
 	#endregion
 
 	void Start()
@@ -38,7 +40,7 @@ public class Managers : MonoBehaviour
 
     void Update()
     {
-
+        mNetwork.Update();
     }
 
     static void Init()
@@ -55,9 +57,10 @@ public class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
-            s_instance._data.Init();
-            s_instance._pool.Init();
-            s_instance._sound.Init();
+            s_instance.mNetwork.Init();
+            s_instance.mData.Init();
+            s_instance.mPool.Init();
+            s_instance.mSound.Init();
         }		
 	}
 

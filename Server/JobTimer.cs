@@ -1,5 +1,4 @@
-﻿using System;
-using ServerCore;
+﻿using ServerCore;
 
 namespace Server
 {

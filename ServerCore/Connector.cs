@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 
 // 서버끼리 통신을 하기 위해서도 필요

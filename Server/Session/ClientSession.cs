@@ -1,9 +1,7 @@
 ﻿using System;
 using ServerCore;
 using System.Net;
-using System.Text;
 using Google.Protobuf.Protocol;
-using static Google.Protobuf.Protocol.Person.Types;
 using Google.Protobuf;
 
 namespace Server
@@ -37,20 +35,17 @@ namespace Server
             //Program.Room.Push(() => Program.Room.Enter(this));
             // Program.Room.Enter(this);
 
-            Person person = new Person()
+            SC_Chat chat = new SC_Chat()
             {
-                Name = "Test",
-                Id = 123,
-                Email = "test@naver.com",
-                Phones = { new PhoneNumber { Number = "555-4321", Type = PhoneType.Home } },
+                Context = "안녕하세요"
             };
 
-            int size = person.CalculateSize();
-            byte[] sendBuffer = person.ToByteArray();
+            int size = (ushort)chat.CalculateSize();
+            byte[] sendBuffer = new byte[size + 4];
             Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
-            ushort protocolId = 1;
+            ushort protocolId = (ushort)MsgId.ScChat;
             Array.Copy(BitConverter.GetBytes(protocolId), 0, sendBuffer, 2, sizeof(ushort));
-            Array.Copy(person.ToByteArray(), 0, sendBuffer, 4, size);
+            Array.Copy(chat.ToByteArray(), 0, sendBuffer, 4, size);
 
             Send(new ArraySegment<byte>(sendBuffer));
         }
