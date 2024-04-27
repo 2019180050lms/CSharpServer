@@ -99,7 +99,6 @@
     <None Include="Assets/Libs/System.Memory.dll" />
     <None Include="Assets/Libs/System.Buffers.dll" />
     <None Include="Assets/Libs/Google.Protobuf.dll" />
-    <None Include="Assets/Libs/ServerCore.dll" />
     <None Include="Assets/Libs/System.Runtime.CompilerServices.Unsafe.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -348,9 +347,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@3.0.2/Runtime/Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ServerCore">
-      <HintPath>Assets/Libs/ServerCore.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>Assets/Libs/Google.Protobuf.dll</HintPath>

@@ -53,3 +53,6 @@ dotnet_diagnostic.CS8981.severity = suggestion
 
 # CS0436: 형식이 가져온 형식과 충돌합니다.
 dotnet_diagnostic.CS0436.severity = suggestion
+
+# IDE0057: 범위 연산자 사용
+dotnet_diagnostic.IDE0057.severity = suggestion

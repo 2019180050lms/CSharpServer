@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using UnityEngine;
 
 // 서버끼리 통신을 하기 위해서도 필요
 namespace ServerCore
@@ -46,7 +47,7 @@ namespace ServerCore
             }
             else
             {
-                Console.WriteLine($"OnConnectCompletedFail {args.SocketError}");
+                Debug.Log($"OnConnectCompletedFail {args.SocketError}");
             }
         }
     }
