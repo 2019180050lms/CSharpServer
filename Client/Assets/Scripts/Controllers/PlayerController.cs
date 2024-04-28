@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
-using static Define;
 
 public class PlayerController : CreatureController
 {
@@ -31,13 +31,16 @@ public class PlayerController : CreatureController
 
     protected override void UpdateAnimation()
     {
-        if (mState == CreatureState.Idle)
+        if (mAnimator == null)
+            return;
+
+        if (State == CreatureState.Idle)
         {
             mAnimator.Play("IDLE");
         }
-        else if (mState == CreatureState.Moving)
+        else if (State == CreatureState.Moving)
         {
-            switch (mDir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     mAnimator.Play(mRangeSkill ? "RUN_AIM" : "RUN_AIM");
@@ -57,7 +60,7 @@ public class PlayerController : CreatureController
                     break;
             }
         }
-        else if (mState == CreatureState.Skill)
+        else if (State == CreatureState.Skill)
         {
             // TODO
             mAnimator.Play("SHOOT");

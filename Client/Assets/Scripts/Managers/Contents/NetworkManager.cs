@@ -9,7 +9,7 @@ public class NetworkManager
 {
     ServerSession mSession = new ServerSession();
 
-    public void Send(ArraySegment<byte> sendBuff)
+    public void Send(IMessage sendBuff)
     {
         mSession.Send(sendBuff);
     }

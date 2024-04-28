@@ -20,8 +20,7 @@ public class ObjectManager
 
             MyPlayer = go.GetComponent<MyPlayerController>();
             MyPlayer.Id = info.PlayerId;
-            MyPlayer.CellPos = new Vector3Int(info.PosX, info.PosY, info.PosZ);
-            MyPlayer.transform.rotation = Quaternion.Euler(info.RotX, info.RotY, info.RotZ);
+            MyPlayer.PosInfo = info.PosInfo;
         }
         else
         {
@@ -31,18 +30,18 @@ public class ObjectManager
 
             PlayerController pc = go.GetComponent<PlayerController>();
             pc.Id = info.PlayerId;
-            pc.CellPos = new Vector3Int(info.PosX, info.PosY, info.PosZ);
-            pc.transform.rotation = Quaternion.Euler(info.RotX, info.RotY, info.RotZ);
+            pc.PosInfo = info.PosInfo;
         }
-    }
-    public void Add(int id, GameObject go)
-    {
-        mObjects.Add(id, go);
     }
 
     public void Remove(int id)
     {
+        GameObject go = FindById(id);
+        if (go == null)
+            return;
+
         mObjects.Remove(id);
+        Managers.Resource.Destroy(go);
     }
 
     public void RemoveMyPlayer()
@@ -52,6 +51,13 @@ public class ObjectManager
 
         Remove(MyPlayer.Id);
         MyPlayer = null;
+    }
+
+    public GameObject FindById(int id)
+    {
+        GameObject go = null;
+        mObjects.TryGetValue(id, out go);
+        return go;
     }
 
     public GameObject Find(Vector3Int cellPos)
@@ -84,6 +90,9 @@ public class ObjectManager
 
     public void Clear()
     {
+        foreach (GameObject obj in mObjects.Values)
+            Managers.Resource.Destroy(obj);
+
         mObjects.Clear();
     }
 }
