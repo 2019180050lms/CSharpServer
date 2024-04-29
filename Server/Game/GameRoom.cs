@@ -76,6 +76,53 @@ namespace Server.Game
             }
         }
 
+        public void HandleMove(Player player, CS_Move move)
+        {
+            if (player == null)
+                return;
+
+            // 경합 문제 해결
+            lock (mLock)
+            {
+                // TODO 검증 (해킹)
+
+                PlayerInfo info = player.Info;
+                info.PosInfo = move.PosInfo;
+
+                // 다른 플레이어한테도 알려준다.
+                SC_Move movePacket = new SC_Move();
+                movePacket.PlayerId = player.Info.PlayerId;
+                movePacket.PosInfo = move.PosInfo;
+
+                Broadcast(movePacket);
+            }
+        }
+
+        public void HandleSkill(Player player, CS_Skill skill)
+        {
+            if (player == null)
+                return;
+
+            // Job, Task로 교체
+            lock(mLock)
+            {
+                PlayerInfo info = player.Info;
+                if (info.PosInfo.State != CreatureState.Idle)
+                    return;
+
+                // TODO: 스킬 사용 가능 여부 체크
+
+                // 통과
+                info.PosInfo.State = CreatureState.Skill;
+                SC_Skill ss = new SC_Skill() { Info = new SkillInfo() };
+                ss.PlayerId = info.PlayerId;
+                ss.Info.SkillId = 1;
+                Broadcast(ss);
+
+                // TODO: 데미지 판정
+            }
+        }
+
         public void Broadcast(IMessage packet)
         {
             lock(mLock)
