@@ -36,7 +36,25 @@ public class PlayerController : CreatureController
 
         if (State == CreatureState.Idle)
         {
-            mAnimator.Play("IDLE");
+            switch (mLastDir)
+            {
+                case MoveDir.Up:
+                    mAnimator.Play("IDLE");
+                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    break;
+                case MoveDir.Left:
+                    mAnimator.Play("IDLE");
+                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    break;
+                case MoveDir.Right:
+                    mAnimator.Play("IDLE");
+                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    break;
+                case MoveDir.Down:
+                    mAnimator.Play("IDLE");
+                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    break;
+            }
         }
         else if (State == CreatureState.Moving)
         {
@@ -63,7 +81,25 @@ public class PlayerController : CreatureController
         else if (State == CreatureState.Skill)
         {
             // TODO
-            mAnimator.Play("SHOOT");
+            switch (mLastDir)
+            {
+                case MoveDir.Up:
+                    mAnimator.Play("PUNCH");
+                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    break;
+                case MoveDir.Left:
+                    mAnimator.Play("PUNCH");
+                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    break;
+                case MoveDir.Right:
+                    mAnimator.Play("PUNCH");
+                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    break;
+                case MoveDir.Down:
+                    mAnimator.Play("PUNCH");
+                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    break;
+            }
         }
         else
         {
@@ -86,22 +122,34 @@ public class PlayerController : CreatureController
         }
     }
 
+    public void UseSkill(int skillId)
+    {
+        if (skillId == 1)
+        {
+            mCoSkill = StartCoroutine("CoStartPunch");
+        }
+    }
+
+    protected virtual void CheckUpdatedFlag()
+    {
+
+    }
+
     IEnumerator CoStartPunch()
     {
-        // 피격 판정
-        GameObject go = Managers.Object.Find(GetFrontCellPos());
-        if(go != null)
-        {
-            CreatureController cc = go.GetComponent<CreatureController>();
-            if (cc != null)
-                cc.OnDamaged();
-        }
+        // 쿨타임 처리는 서버, 클라 둘다 해야한다
+        // -> 혹시라도 공격을 연타하게 되면 패킷을 계속 보내게 되니
+        // -> 네트워크 낭비 패킷을 연속해서 날릴 수 없도록 막아야 한다.
 
         // 대기 시간
         mRangeSkill = false;
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(0.5f);
-        State = CreatureState.Moving;
+
+        // Case by Case.. 서버 쪽에서 상태를 바꿔줘도 되고 클라에서 바꿔줘도 된다.
+        State = CreatureState.Idle;
         mCoSkill = null;
+        CheckUpdatedFlag();
     }
 
     IEnumerator CoStartShootBullet()
