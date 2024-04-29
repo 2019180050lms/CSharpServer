@@ -4,6 +4,7 @@ using System.Net;
 using Google.Protobuf.Protocol;
 using Google.Protobuf;
 using Server.Game;
+using Server.Data;
 
 namespace Server
 {
@@ -43,6 +44,11 @@ namespace Server
             MyPlayer.Info.PosInfo.RotX = 0;
             MyPlayer.Info.PosInfo.RotY = 40;
             MyPlayer.Info.PosInfo.RotZ = 0;
+
+            StatInfo stat = null;
+            DataManager.StatDict.TryGetValue(1, out stat);
+            MyPlayer.Stat.MergeFrom(stat);
+
             MyPlayer.Session = this;
 
             RoomManager.Instance.Find(1).EnterGame(MyPlayer);

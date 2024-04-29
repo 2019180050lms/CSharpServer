@@ -1,4 +1,6 @@
 ﻿using System;
+using Google.Protobuf.Protocol;
+
 namespace Server.Data
 {
     public interface ILoader<Key, Value>
@@ -8,12 +10,12 @@ namespace Server.Data
 
     public class DataManager
     {
-        public static Dictionary<int, Data.Stat> StatDict { get; private set; } = new Dictionary<int, Data.Stat>();
+        public static Dictionary<int, StatInfo> StatDict { get; private set; } = new Dictionary<int, StatInfo>();
         public static Dictionary<int, Data.Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
 
         public static void LoadData()
         {
-            StatDict = LoadJson<Data.StatData, int, Data.Stat>("StatData").MakeDict();
+            StatDict = LoadJson<Data.StatData, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<Data.SkillData, int, Data.Skill>("SkillData").MakeDict();
         }
 
