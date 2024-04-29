@@ -37,10 +37,11 @@ namespace Server.Game
 				{
 					// TODO: 피격 판정
 
-					// 소멸
-					Room.LeaveGame(Id);
 				}
-			}
+
+                // 소멸
+                Room.LeaveGame(Id);
+            }
 		}
 	}
 }

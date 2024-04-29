@@ -84,19 +84,19 @@ public class PlayerController : CreatureController
             switch (Dir)
             {
                 case MoveDir.Up:
-                    mAnimator.Play("KICK");
+                    mAnimator.Play(mRangeSkill ? "SHOOT" : "KICK");
                     transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case MoveDir.Left:
-                    mAnimator.Play("KICK");
+                    mAnimator.Play(mRangeSkill ? "SHOOT" : "KICK");
                     transform.rotation = Quaternion.Euler(0, -90, 0);
                     break;
                 case MoveDir.Right:
-                    mAnimator.Play("KICK");
+                    mAnimator.Play(mRangeSkill ? "SHOOT" : "KICK");
                     transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case MoveDir.Down:
-                    mAnimator.Play("KICK");
+                    mAnimator.Play(mRangeSkill ? "SHOOT" : "KICK");
                     transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
             }
@@ -117,6 +117,10 @@ public class PlayerController : CreatureController
         if (skillId == 1)
         {
             mCoSkill = StartCoroutine("CoStartPunch");
+        }
+        else if(skillId == 2)
+        {
+            mCoSkill = StartCoroutine("CoStartShootBullet");
         }
     }
 
@@ -144,16 +148,13 @@ public class PlayerController : CreatureController
 
     IEnumerator CoStartShootBullet()
     {
-        GameObject go = Managers.Resource.Instantiate("Creature/Bullet");
-        BulletController bc = go.GetComponent<BulletController>();
-        bc.Dir = Dir;
-        bc.CellPos = CellPos;
-
         // 대기 시간
         mRangeSkill = true;
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(0.3f);
-        State = CreatureState.Moving;
+        State = CreatureState.Idle;
         mCoSkill = null;
+        CheckUpdatedFlag();
     }
 
     public override void OnDamaged()
