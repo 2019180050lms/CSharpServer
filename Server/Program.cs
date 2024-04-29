@@ -32,9 +32,14 @@ namespace Server
             // FlushRoom();
             JobTimer.Instance.Push(FlushRoom, 0);
 
+
+            // TODO: JobTimer
             while (true)
             {
-                JobTimer.Instance.Flush();
+                //JobTimer.Instance.Flush();
+                RoomManager.Instance.Find(1).Update();
+
+                Thread.Sleep(100);
             }
         }
     }

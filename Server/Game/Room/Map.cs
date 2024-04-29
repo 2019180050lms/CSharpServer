@@ -59,7 +59,7 @@ namespace Server.Game
         public int SizeY { get { return MaxY - MinY + 1; } }
 
         bool[,] mCollision;
-        Player[,] mPlayers;
+        GameObject[,] mObjects;
 
         public bool CanGo(Vector3Int cellPos, bool checkObjects = true)
         {
@@ -70,10 +70,10 @@ namespace Server.Game
 
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
-            return !mCollision[y, x] && (!checkObjects || mPlayers[y, x] == null);
+            return !mCollision[y, x] && (!checkObjects || mObjects[y, x] == null);
         }
 
-        public Player Find(Vector3Int cellPos)
+        public GameObject Find(Vector3Int cellPos)
         {
             if (cellPos.x < MinX || cellPos.x > MaxX)
                 return null;
@@ -82,32 +82,38 @@ namespace Server.Game
 
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
-            return mPlayers[y, x];
+            return mObjects[y, x];
         }
 
-        public bool ApplyMove(Player player, Vector3Int dest)
+        public bool ApplyLeave(GameObject gameObject)
         {
-            PositionInfo posInfo = player.Info.PosInfo;
+            PositionInfo posInfo = gameObject.PosInfo;
             if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
                 return false;
             if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
                 return false;
+
+            int x = posInfo.PosX - MinX;
+            int y = MaxY - posInfo.PosY;
+            if (mObjects[y, x] == gameObject)
+                mObjects[y, x] = null;
+
+            return true;
+        }
+
+        public bool ApplyMove(GameObject gameObject, Vector3Int dest)
+        {
+            ApplyLeave(gameObject);
+
+            PositionInfo posInfo = gameObject.PosInfo;
             if (CanGo(dest, true) == false)
                 return false;
-
-            {
-                // 플레이어 기존 위치 null로 변경
-                int x = posInfo.PosX - MinX;
-                int y = MaxY - posInfo.PosY;
-                if (mPlayers[y, x] == player)
-                    mPlayers[y, x] = null;
-            }
 
             {
                 // 플레이어 새로운 위치로 이동
                 int x = dest.x - MinX;
                 int y = MaxY - dest.y;
-                mPlayers[y, x] = player;
+                mObjects[y, x] = gameObject;
             }
 
             // 실제로 좌표 이동
@@ -133,7 +139,7 @@ namespace Server.Game
             int xCount = MaxX - MinX + 1;
             int yCount = MaxY - MinY + 1;
             mCollision = new bool[yCount, xCount];
-            mPlayers = new Player[yCount, xCount];
+            mObjects = new GameObject[yCount, xCount];
 
             for (int y = 0; y < yCount; ++y)
             {
