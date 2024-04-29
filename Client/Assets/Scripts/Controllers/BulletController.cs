@@ -8,7 +8,7 @@ public class BulletController : CreatureController
 {
     protected override void Init()
     {
-        switch (mLastDir)
+        switch (Dir)
         {
             case MoveDir.Up:
                 transform.rotation = Quaternion.Euler(0, 0, 0);

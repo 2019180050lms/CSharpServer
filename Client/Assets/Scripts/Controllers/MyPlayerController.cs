@@ -6,6 +6,9 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
+    // MoveDir.None 대신 추가
+    bool mMoveKeyPressed = false;
+
     protected override void Init()
     {
         base.Init();
@@ -30,7 +33,7 @@ public class MyPlayerController : PlayerController
     protected override void UpdateIdle()
     {
         // 이동 상태로 갈지 확인
-        if (Dir != MoveDir.None)
+        if (mMoveKeyPressed)
         {
             State = CreatureState.Moving;
             return;
@@ -43,7 +46,7 @@ public class MyPlayerController : PlayerController
             Debug.Log("Skill");
 
             CS_Skill skill = new CS_Skill() { Info = new SkillInfo() };
-            skill.Info.SkillId = 1;
+            skill.Info.SkillId = 2;
             Managers.Network.Send(skill);
 
             mCoSkillCooltime = StartCoroutine("CoInputCooltime", 0.2f);
@@ -64,6 +67,8 @@ public class MyPlayerController : PlayerController
 
     void GetDirInput()
     {
+        mMoveKeyPressed = true;
+
         if (Input.GetKey(KeyCode.W))
         {
             //transform.position += Vector3.forward * Time.deltaTime * mSpeed;
@@ -86,13 +91,13 @@ public class MyPlayerController : PlayerController
         }
         else
         {
-            Dir = MoveDir.None;
+            mMoveKeyPressed = false;
         }
     }
 
     protected override void MoveToNextPos()
     {
-        if (Dir == MoveDir.None)
+        if (mMoveKeyPressed == false)
         {
             State = CreatureState.Idle;
             CheckUpdatedFlag();

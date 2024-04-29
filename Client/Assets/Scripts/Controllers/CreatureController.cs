@@ -67,8 +67,6 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    protected MoveDir mLastDir = MoveDir.None;
-
     public MoveDir Dir
     {
         get { return PosInfo.MoveDir; }
@@ -78,8 +76,6 @@ public class CreatureController : MonoBehaviour
                 return;
 
             PosInfo.MoveDir = value;
-            if (PosInfo.MoveDir != MoveDir.None)
-                mLastDir = value;
 
             UpdateAnimation();
             mUpdated = true;
@@ -94,17 +90,15 @@ public class CreatureController : MonoBehaviour
             return MoveDir.Left;
         else if (dir.y > 0)
             return MoveDir.Up;
-        else if (dir.y < 0)
-            return MoveDir.Down;
         else
-            return MoveDir.None;
+            return MoveDir.Down;
     }
 
     public Vector3Int GetFrontCellPos()
     {
         Vector3Int cellPos = CellPos;
 
-        switch (mLastDir)
+        switch (Dir)
         {
             case MoveDir.Up:
                 cellPos += Vector3Int.up;
@@ -137,27 +131,27 @@ public class CreatureController : MonoBehaviour
             switch (Dir)
             {
                 case MoveDir.Up:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case MoveDir.Left:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, -90, 0);
                     break;
                 case MoveDir.Right:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case MoveDir.Down:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
             }
         }
         else if(State == CreatureState.Skill)
         {
             // TODO
-            mAnimator.Play("SHOOT");
+            mAnimator.Play("KICK");
         }
         else
         {
@@ -184,7 +178,7 @@ public class CreatureController : MonoBehaviour
         transform.position = pos;
 
         State = CreatureState.Idle;
-        Dir = MoveDir.None;
+        Dir = MoveDir.Down;
         UpdateAnimation();
     }
 

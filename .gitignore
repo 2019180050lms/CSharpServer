@@ -404,3 +404,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 Client/Assets/MediumMechStriker/Textures/MediumMechStriker/MediumMechStrikerPSDSourcefile.rar
+Client/Assets/FreeTestCharacterAsuna/Textures/AsunaArmor/AsunaArmorPSDSourcefile.zip
+*.zip

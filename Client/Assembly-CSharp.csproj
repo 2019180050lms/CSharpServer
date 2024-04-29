@@ -99,6 +99,7 @@
     <None Include="Assets/Resources/Map/Map_001.txt" />
     <None Include="Assets/Libs/System.Memory.dll" />
     <None Include="Assets/Libs/System.Buffers.dll" />
+    <None Include="Assets/Resources/Map/Map_002.txt" />
     <None Include="Assets/Libs/Google.Protobuf.dll" />
     <None Include="Assets/Libs/System.Runtime.CompilerServices.Unsafe.dll" />
   </ItemGroup>

@@ -54,7 +54,7 @@ public class MonsterController : CreatureController
         base.Init();
 
         State = CreatureState.Idle;
-        Dir = MoveDir.None;
+        Dir = MoveDir.Down;
 
         mSpeed = 1.0f;
         mRangedSkill = (Random.Range(0, 2) == 0 ? true : false);
@@ -232,7 +232,7 @@ public class MonsterController : CreatureController
     {
         GameObject go = Managers.Resource.Instantiate("Creature/Bullet");
         BulletController bc = go.GetComponent<BulletController>();
-        bc.Dir = mLastDir;
+        bc.Dir = Dir;
         bc.CellPos = CellPos;
 
         // 대기 시간

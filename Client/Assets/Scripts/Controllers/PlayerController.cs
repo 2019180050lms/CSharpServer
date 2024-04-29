@@ -10,7 +10,7 @@ public class PlayerController : CreatureController
 
     protected override void Init()
     {
-        switch (mLastDir)
+        switch (Dir)
         {
             case MoveDir.Up:
                 transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -36,23 +36,23 @@ public class PlayerController : CreatureController
 
         if (State == CreatureState.Idle)
         {
-            switch (mLastDir)
+            switch (Dir)
             {
                 case MoveDir.Up:
                     mAnimator.Play("IDLE");
-                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case MoveDir.Left:
                     mAnimator.Play("IDLE");
-                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    transform.rotation = Quaternion.Euler(0, -90, 0);
                     break;
                 case MoveDir.Right:
                     mAnimator.Play("IDLE");
-                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case MoveDir.Down:
                     mAnimator.Play("IDLE");
-                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
             }
         }
@@ -61,43 +61,43 @@ public class PlayerController : CreatureController
             switch (Dir)
             {
                 case MoveDir.Up:
-                    mAnimator.Play(mRangeSkill ? "RUN_AIM" : "RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    mAnimator.Play(mRangeSkill ? "WALK" : "WALK");
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case MoveDir.Left:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, -90, 0);
                     break;
                 case MoveDir.Right:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case MoveDir.Down:
-                    mAnimator.Play("RUN_AIM");
-                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    mAnimator.Play("WALK");
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
             }
         }
         else if (State == CreatureState.Skill)
         {
             // TODO
-            switch (mLastDir)
+            switch (Dir)
             {
                 case MoveDir.Up:
-                    mAnimator.Play("PUNCH");
-                    transform.rotation = Quaternion.Euler(0, 40, 0);
+                    mAnimator.Play("KICK");
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case MoveDir.Left:
-                    mAnimator.Play("PUNCH");
-                    transform.rotation = Quaternion.Euler(0, -50, 0);
+                    mAnimator.Play("KICK");
+                    transform.rotation = Quaternion.Euler(0, -90, 0);
                     break;
                 case MoveDir.Right:
-                    mAnimator.Play("PUNCH");
-                    transform.rotation = Quaternion.Euler(0, 130, 0);
+                    mAnimator.Play("KICK");
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case MoveDir.Down:
-                    mAnimator.Play("PUNCH");
-                    transform.rotation = Quaternion.Euler(0, 220, 0);
+                    mAnimator.Play("KICK");
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
             }
         }
@@ -110,16 +110,6 @@ public class PlayerController : CreatureController
     protected override void UpdateController()
     {
         base.UpdateController();
-    }
-
-    protected override void UpdateIdle()
-    {
-        // 이동 상태로 갈지 확인
-        if(Dir != MoveDir.None)
-        {
-            State = CreatureState.Moving;
-            return;
-        }
     }
 
     public void UseSkill(int skillId)
@@ -156,7 +146,7 @@ public class PlayerController : CreatureController
     {
         GameObject go = Managers.Resource.Instantiate("Creature/Bullet");
         BulletController bc = go.GetComponent<BulletController>();
-        bc.Dir = mLastDir;
+        bc.Dir = Dir;
         bc.CellPos = CellPos;
 
         // 대기 시간
