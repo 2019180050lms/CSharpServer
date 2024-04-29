@@ -225,6 +225,7 @@ namespace Server.Game
                             bullet.PosInfo.PosX = player.PosInfo.PosX;
                             bullet.PosInfo.PosY = player.PosInfo.PosY;
                             bullet.PosInfo.PosZ = player.PosInfo.PosZ;
+                            bullet.Speed = skillData.projectile.speed;
                             EnterGame(bullet);
                         }
                         break;

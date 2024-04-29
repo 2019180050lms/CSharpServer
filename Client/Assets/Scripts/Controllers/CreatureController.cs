@@ -8,8 +8,26 @@ public class CreatureController : MonoBehaviour
 {
     public int Id { get; set; }
 
-    [SerializeField]
-    public float mSpeed = 5.0f;
+    StatInfo mStat = new StatInfo();
+    public StatInfo Stat
+    {
+        get { return mStat; }
+        set
+        {
+            if (mStat.Equals(value))
+                return;
+
+            mStat.Hp = value.Hp;
+            mStat.MaxHp = value.MaxHp;
+            mStat.Speed = value.Speed;
+        }
+    }
+
+    public float Speed
+    {
+        get { return Stat.Speed; }
+        set { Stat.Speed = value; }
+    }
 
     protected bool mUpdated = false;
 
@@ -215,14 +233,14 @@ public class CreatureController : MonoBehaviour
 
         // 도착 여부 체크
         float dist = moveDir.magnitude;
-        if (dist < mSpeed * Time.deltaTime)
+        if (dist < Speed * Time.deltaTime)
         {
             transform.position = destPos;
             MoveToNextPos();
         }
         else
         {
-            transform.position += moveDir.normalized * mSpeed * Time.deltaTime;
+            transform.position += moveDir.normalized * Speed * Time.deltaTime;
             State  = CreatureState.Moving;
         }
     }

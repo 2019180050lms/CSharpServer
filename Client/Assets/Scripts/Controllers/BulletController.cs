@@ -25,7 +25,6 @@ public class BulletController : CreatureController
         }
 
         State = CreatureState.Moving;
-        mSpeed = 10.0f;
 
         // TODO
         base.Init();
