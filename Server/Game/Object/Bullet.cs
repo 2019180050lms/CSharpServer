@@ -37,6 +37,7 @@ namespace Server.Game
 				if(target != null)
 				{
 					// TODO: 피격 판정
+					Console.WriteLine($"Damage:  {Data.damage}");
 
 				}
 

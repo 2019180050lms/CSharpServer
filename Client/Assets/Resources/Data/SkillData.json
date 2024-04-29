@@ -15,7 +15,7 @@
       "skillType": "SkillProjectile",
       "projectile": {
         "name": "총알",
-        "speed": "10.0",
+        "speed": "20.0",
         "range": "10",
         "prefeb": "Creature/Bullet"
       }
