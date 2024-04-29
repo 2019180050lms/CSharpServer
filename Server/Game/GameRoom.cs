@@ -13,7 +13,14 @@ namespace Server.Game
         object mLock = new object();
         public int RoomId { get; set; }
 
-        List<Player> mPlayers = new List<Player>();
+        Dictionary<int, Player> mPlayers = new Dictionary<int, Player>();
+
+        Map mMap = new Map();
+
+        public void Init(int mapId)
+        {
+            mMap.LoadMap(mapId, "../../../../Common/MapData");
+        }
 
         public void EnterGame(Player newPlayer)
         {
@@ -22,7 +29,7 @@ namespace Server.Game
 
             lock (mLock)
             {
-                mPlayers.Add(newPlayer);
+                mPlayers.Add(newPlayer.Info.PlayerId, newPlayer);
                 newPlayer.Room = this;
 
                 // 본인한테 정보 전송
@@ -32,7 +39,7 @@ namespace Server.Game
 
                 // 본인한테 기존 유저 정보 전송
                 SC_Spawn spawnPacket = new SC_Spawn();
-                foreach (Player p in mPlayers)
+                foreach (Player p in mPlayers.Values)
                 {
                     if (newPlayer != p)
                         spawnPacket.Players.Add(p.Info);
@@ -42,7 +49,7 @@ namespace Server.Game
                 // 타인한테 정보 전송
                 SC_Spawn spawnNewPacket = new SC_Spawn();
                 spawnNewPacket.Players.Add(newPlayer.Info);
-                foreach(Player p in mPlayers)
+                foreach(Player p in mPlayers.Values)
                 {
                     if (newPlayer != p)
                         p.Session.Send(spawnNewPacket);
@@ -54,11 +61,10 @@ namespace Server.Game
         {
             lock (mLock)
             {
-                Player player = mPlayers.Find(p => p.Info.PlayerId == playerId);
-                if (player == null)
+                Player player = null;
+                if(mPlayers.Remove(playerId, out player) == false)
                     return;
 
-                mPlayers.Remove(player);
                 player.Room = null;
 
                 // 본인한테 정보 전송
@@ -68,7 +74,7 @@ namespace Server.Game
                 // 타인한테 정보 전송
                 SC_Despawn despawn = new SC_Despawn();
                 despawn.PlayerId.Add(player.Info.PlayerId);
-                foreach(Player p in mPlayers)
+                foreach(Player p in mPlayers.Values)
                 {
                     if (player != p)
                         p.Session.Send(despawn);
@@ -85,9 +91,21 @@ namespace Server.Game
             lock (mLock)
             {
                 // TODO 검증 (해킹)
-
+                PositionInfo movePosInfo = move.PosInfo;
                 PlayerInfo info = player.Info;
-                info.PosInfo = move.PosInfo;
+
+                // 다른 좌표로 이동할 경, 갈 수 있는지 체크
+                if(movePosInfo.PosX != info.PosInfo.PosX ||
+                    movePosInfo.PosY != info.PosInfo.PosY ||
+                    movePosInfo.PosZ != info.PosInfo.PosZ)
+                {
+                    if (mMap.CanGo(new Vector3Int(movePosInfo.PosX, movePosInfo.PosY, movePosInfo.PosZ)) == false)
+                        return;
+                }
+
+                info.PosInfo.State = movePosInfo.State;
+                info.PosInfo.MoveDir = movePosInfo.MoveDir;
+                mMap.ApplyMove(player, new Vector3Int(movePosInfo.PosX, movePosInfo.PosY, movePosInfo.PosZ));
 
                 // 다른 플레이어한테도 알려준다.
                 SC_Move movePacket = new SC_Move();
@@ -120,6 +138,12 @@ namespace Server.Game
                 Broadcast(ss);
 
                 // TODO: 데미지 판정
+                Vector3Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                Player target = mMap.Find(skillPos);
+                if(target != null)
+                {
+                    Console.WriteLine("Hit Player");
+                }
             }
         }
 
@@ -127,7 +151,7 @@ namespace Server.Game
         {
             lock(mLock)
             {
-                foreach(Player p in mPlayers)
+                foreach(Player p in mPlayers.Values)
                 {
                     p.Session.Send(packet);
                 }
