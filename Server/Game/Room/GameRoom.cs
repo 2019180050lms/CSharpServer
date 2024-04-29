@@ -1,7 +1,9 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -191,32 +193,51 @@ namespace Server.Game
                 ss.Info.SkillId = skill.Info.SkillId;
                 Broadcast(ss);
 
+                Data.Skill skillData = null;
+                if (DataManager.SkillDict.TryGetValue(skill.Info.SkillId, out skillData) == false)
+                    return;
+
+                switch (skillData.skillType)
+                {
+                    case SkillType.SkillAuto:
+                        {
+                            // TODO: 데미지 판정
+                            Vector3Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                            GameObject target = Map.Find(skillPos);
+                            if (target != null)
+                            {
+                                Console.WriteLine("Hit GameObject");
+                            }
+                        }
+                        break;
+                    case SkillType.SkillProjectile:
+                        {
+                            // 총알 계산을 서버에서 해야하나?
+                            // 총알의 존재를 모두에게 알려야 정확한 동기화가 가능
+                            Bullet bullet = ObjectManager.Instance.Add<Bullet>();
+                            if (bullet == null)
+                                return;
+
+                            bullet.Owner = player;
+                            bullet.Data = skillData;
+                            bullet.PosInfo.State = CreatureState.Moving;
+                            bullet.PosInfo.MoveDir = player.PosInfo.MoveDir;
+                            bullet.PosInfo.PosX = player.PosInfo.PosX;
+                            bullet.PosInfo.PosY = player.PosInfo.PosY;
+                            bullet.PosInfo.PosZ = player.PosInfo.PosZ;
+                            EnterGame(bullet);
+                        }
+                        break;
+                }
+
                 // 통과
                 if (skill.Info.SkillId == 1)
                 {
-                    // TODO: 데미지 판정
-                    Vector3Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                    GameObject target = Map.Find(skillPos);
-                    if (target != null)
-                    {
-                        Console.WriteLine("Hit GameObject");
-                    }
+                    
                 }
                 else if (skill.Info.SkillId == 2)
                 {
-                    // 총알 계산을 서버에서 해야하나?
-                    // 총알의 존재를 모두에게 알려야 정확한 동기화가 가능
-                    Bullet bullet = ObjectManager.Instance.Add<Bullet>();
-                    if (bullet == null)
-                        return;
-
-                    bullet.Owner = player;
-                    bullet.PosInfo.State = CreatureState.Moving;
-                    bullet.PosInfo.MoveDir = player.PosInfo.MoveDir;
-                    bullet.PosInfo.PosX = player.PosInfo.PosX;
-                    bullet.PosInfo.PosY = player.PosInfo.PosY;
-                    bullet.PosInfo.PosZ = player.PosInfo.PosZ;
-                    EnterGame(bullet);
+                    
                 }
             }
         }

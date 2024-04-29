@@ -10,13 +10,14 @@ namespace Server.Game
 
 		public override void Update()
 		{
-			if (Owner == null || Room == null)
+			if (Data == null || Data.projectile == null || Owner == null || Room == null)
 				return;
 
 			if (mNextMoveTick >= Environment.TickCount64)
 				return;
 
-			mNextMoveTick = Environment.TickCount64 + 50;
+			long tick = (long)(1000 / Data.projectile.speed);
+			mNextMoveTick = Environment.TickCount64 + tick;
 
 			Vector3Int destPos = GetFrontCellPos();
 			if (Room.Map.CanGo(destPos))
