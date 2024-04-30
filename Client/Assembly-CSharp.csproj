@@ -61,6 +61,7 @@
     <Compile Include="Assets/Scripts/Packet/ServerSession.cs" />
     <Compile Include="Assets/Scripts/Managers/Contents/MapManager.cs" />
     <Compile Include="Assets/Scripts/Network/Session.cs" />
+    <Compile Include="Assets/Scripts/Contents/HpBar.cs" />
     <Compile Include="Assets/Scripts/Scenes/GameScene.cs" />
     <Compile Include="Assets/Scripts/Controllers/MonsterController.cs" />
     <Compile Include="Assets/Scripts/Utils/Util.cs" />
@@ -100,6 +101,7 @@
     <None Include="Assets/Libs/System.Memory.dll" />
     <None Include="Assets/Libs/System.Buffers.dll" />
     <None Include="Assets/Resources/Map/Map_002.txt" />
+    <None Include="Assets/Resources/Map/Map_001 1.txt" />
     <None Include="Assets/Libs/Google.Protobuf.dll" />
     <None Include="Assets/Libs/System.Runtime.CompilerServices.Unsafe.dll" />
   </ItemGroup>

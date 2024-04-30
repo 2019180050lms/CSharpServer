@@ -83,10 +83,7 @@ class PacketHandler
         if (cc == null)
             return;
 
-        cc.Stat.Hp = changePacket.Hp;
-
-        // TODO: UI 갱신
-        Debug.Log($"ChamgeP : {changePacket.Hp}");
+        cc.Hp = changePacket.Hp;
     }
     
 }
