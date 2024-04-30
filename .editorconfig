@@ -62,3 +62,6 @@ dotnet_diagnostic.CS8714.severity = suggestion
 
 # CS8601: 가능한 null 참조 할당입니다.
 dotnet_diagnostic.CS8601.severity = suggestion
+
+# UNT0026: GetComponent always allocates
+dotnet_diagnostic.UNT0026.severity = suggestion

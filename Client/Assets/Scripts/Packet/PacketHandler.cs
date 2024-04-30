@@ -18,7 +18,7 @@ class PacketHandler
     {
         SC_LeaveGame leaveGamePacket = packet as SC_LeaveGame;
 
-        Managers.Object.RemoveMyPlayer();
+        Managers.Object.Clear();
     }
 
     public static void SC_SpawnHandler(PacketSession session, IMessage packet)
@@ -49,11 +49,11 @@ class PacketHandler
         if (go == null)
             return;
 
-        CreatureController cc = go.GetComponent<CreatureController>();
-        if (cc == null)
+        BaseController bc = go.GetComponent<BaseController>();
+        if (bc == null)
             return;
 
-        cc.PosInfo = movePacket.PosInfo;
+        bc.PosInfo = movePacket.PosInfo;
     }
 
     public static void SC_SkillHandler(PacketSession session, IMessage packet)
@@ -85,5 +85,20 @@ class PacketHandler
 
         cc.Hp = changePacket.Hp;
     }
-    
+
+    public static void SC_DieHandler(PacketSession session, IMessage packet)
+    {
+        SC_Die diePacket = packet as SC_Die;
+
+        GameObject go = Managers.Object.FindById(diePacket.ObjectId);
+        if (go == null)
+            return;
+
+        CreatureController cc = go.GetComponent<CreatureController>();
+        if (cc == null)
+            return;
+
+        cc.Hp = 0;
+        cc.OnDead();
+    }
 }

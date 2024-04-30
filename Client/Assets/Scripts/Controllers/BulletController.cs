@@ -4,7 +4,7 @@ using Google.Protobuf.Protocol;
 using UnityEngine;
 using static Define;
 
-public class BulletController : CreatureController
+public class BulletController : BaseController
 {
     protected override void Init()
     {
