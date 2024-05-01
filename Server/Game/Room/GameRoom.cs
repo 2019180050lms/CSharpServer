@@ -29,6 +29,15 @@ namespace Server.Game
             Monster monster = ObjectManager.Instance.Add<Monster>();
             monster.CellPos = new Vector3Int(5, 5, 5);
             Push(EnterGame, monster);
+
+            TestTimer();
+        }
+
+        // TEST
+        void TestTimer()
+        {
+            Console.WriteLine("Test Timer");
+            PushAfter(100, TestTimer);
         }
 
         public void Update()
@@ -42,6 +51,8 @@ namespace Server.Game
             {
                 projectile.Update();
             }
+
+            Flush();
         }
 
         public void EnterGame(GameObject gameObject)

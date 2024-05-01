@@ -8,10 +8,18 @@ namespace Server
     class Program
     {
         static Listener mListener = new Listener();
+        static List<System.Timers.Timer> mTimers = new List<System.Timers.Timer>();
 
-        static void FlushRoom()
+        // Main Thread가 아니라 다른 쓰레드에서도 실행
+        static void TickRoom(GameRoom room, int tick = 100)
         {
-            JobTimer.Instance.Push(FlushRoom, 250);
+            var timer = new System.Timers.Timer();
+            timer.Interval = tick;
+            timer.Elapsed += ((s, e) => { room.Update(); });
+            timer.AutoReset = true;
+            timer.Enabled = true;
+
+            mTimers.Add(timer);
         }
 
         static void Main(string[] args)
@@ -21,7 +29,8 @@ namespace Server
 
             var d = DataManager.StatDict;
 
-            RoomManager.Instance.Add(1);
+            GameRoom room = RoomManager.Instance.Add(1);
+            TickRoom(room, 50);
 
             // DNS (Domain Name System)
             // ex) www.naver.com -> 127.0.0.1
@@ -36,15 +45,13 @@ namespace Server
             Console.WriteLine("Listening...");
 
             // FlushRoom();
-            JobTimer.Instance.Push(FlushRoom, 0);
+            //JobTimer.Instance.Push(FlushRoom, 0);
 
 
             // TODO: JobTimer
             while (true)
             {
                 //JobTimer.Instance.Flush();
-                GameRoom room = RoomManager.Instance.Find(1);
-                room.Push(room.Update);
                 Thread.Sleep(100);
             }
         }
