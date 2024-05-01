@@ -12,7 +12,7 @@ class PacketHandler
         CS_Move move = packet as CS_Move;
         ClientSession clientSession = session as ClientSession;
 
-        Console.WriteLine($"CS_Move({move.PosInfo.PosX} {move.PosInfo.PosY} {move.PosInfo.PosZ})");
+        // Console.WriteLine($"CS_Move({move.PosInfo.PosX} {move.PosInfo.PosY} {move.PosInfo.PosZ})");
 
         // 멀티 쓰레드 환경에서 위험 Player를 꺼내서 체크 해야함
         // 다른 쓰레드에서 MyPlayer를 null로 밀 수 있기 때문, Room도 마찬가지

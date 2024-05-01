@@ -29,8 +29,6 @@ namespace Server.Game
             Monster monster = ObjectManager.Instance.Add<Monster>();
             monster.CellPos = new Vector3Int(5, 5, 5);
             Push(EnterGame, monster);
-
-            TestTimer();
         }
 
         // TEST
