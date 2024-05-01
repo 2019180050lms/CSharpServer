@@ -26,7 +26,9 @@ public class PacketManager
 		mOnRecv.Add((ushort)MsgId.CsMove, MakePacket<CS_Move>);
         mHandler.Add((ushort)MsgId.CsMove, PacketHandler.CS_MoveHandler);        
 		mOnRecv.Add((ushort)MsgId.CsSkill, MakePacket<CS_Skill>);
-        mHandler.Add((ushort)MsgId.CsSkill, PacketHandler.CS_SkillHandler);
+        mHandler.Add((ushort)MsgId.CsSkill, PacketHandler.CS_SkillHandler);        
+		mOnRecv.Add((ushort)MsgId.CsLogin, MakePacket<CS_Login>);
+        mHandler.Add((ushort)MsgId.CsLogin, PacketHandler.CS_LoginHandler);
 	}
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

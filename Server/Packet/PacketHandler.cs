@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server;
+using Server.DB;
 using Server.Game;
 using ServerCore;
 using System.Numerics;
@@ -44,5 +45,36 @@ class PacketHandler
             return;
 
         room.Push(room.HandleSkill, player, skill);
+    }
+
+    public static void CS_LoginHandler(PacketSession session, IMessage packet)
+    {
+        CS_Login loginPacket = packet as CS_Login;
+        ClientSession clientSession = session as ClientSession;
+
+        Console.WriteLine($"UniqueId {loginPacket.UniqueId}");
+
+        // TODO: 보안 체크
+
+        // TODO: 문제가 있음 수정 필요
+        using (AppDbContext db = new AppDbContext())
+        {
+            AccountDb findAccount = db.Accounts.Where(a => a.AccountName == loginPacket.UniqueId).FirstOrDefault();
+
+            if(findAccount != null)
+            {
+                SC_Login loginOk = new SC_Login() { LoginOk = 1 };
+                clientSession.Send(loginOk);
+            }
+            else
+            {
+                AccountDb newAccount = new AccountDb() { AccountName = loginPacket.UniqueId };
+                db.Accounts.Add(newAccount);
+                db.SaveChanges();
+
+                SC_Login loginOk = new SC_Login() { LoginOk = 1 };
+                clientSession.Send(loginOk);
+            }
+        }
     }
 }

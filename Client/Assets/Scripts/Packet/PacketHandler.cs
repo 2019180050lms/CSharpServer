@@ -104,4 +104,18 @@ class PacketHandler
         cc.Hp = 0;
         cc.OnDead();
     }
+
+    public static void SC_ConnectedHandler(PacketSession session, IMessage packet)
+    {
+        Debug.Log("SC_ConnectedHandler");
+        CS_Login loginPacket = new CS_Login();
+        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
+        Managers.Network.Send(loginPacket);
+    }
+
+    public static void SC_LoginHandler(PacketSession session, IMessage packet)
+    {
+        SC_Login loginPacket = packet as SC_Login;
+        Debug.Log($"LoginOk: {loginPacket.LoginOk}");
+    }
 }
