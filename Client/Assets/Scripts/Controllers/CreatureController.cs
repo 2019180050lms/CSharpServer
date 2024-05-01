@@ -66,4 +66,9 @@ public class CreatureController : BaseController
 
         // TODO: Effect
     }
+
+    public virtual void UseSkill(int skillId)
+    {
+
+    }
 }

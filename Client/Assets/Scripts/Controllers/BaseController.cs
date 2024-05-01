@@ -176,8 +176,81 @@ public class BaseController : MonoBehaviour
         }
         else if (State == CreatureState.Skill)
         {
+            if (mAnimator == null)
+                return;
+
+            if (State == CreatureState.Idle)
+            {
+                switch (Dir)
+                {
+                    case MoveDir.Up:
+                        mAnimator.Play("IDLE");
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                        break;
+                    case MoveDir.Left:
+                        mAnimator.Play("IDLE");
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                        break;
+                    case MoveDir.Right:
+                        mAnimator.Play("IDLE");
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                        break;
+                    case MoveDir.Down:
+                        mAnimator.Play("IDLE");
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                        break;
+                }
+            }
+            else if (State == CreatureState.Moving)
+            {
+                switch (Dir)
+                {
+                    case MoveDir.Up:
+                        mAnimator.Play("WALK");
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                        break;
+                    case MoveDir.Left:
+                        mAnimator.Play("WALK");
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                        break;
+                    case MoveDir.Right:
+                        mAnimator.Play("WALK");
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                        break;
+                    case MoveDir.Down:
+                        mAnimator.Play("WALK");
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                        break;
+                }
+            }
+            else if (State == CreatureState.Skill)
+            {
+                // TODO
+                switch (Dir)
+                {
+                    case MoveDir.Up:
+                        mAnimator.Play("KICK");
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
+                        break;
+                    case MoveDir.Left:
+                        mAnimator.Play("KICK");
+                        transform.rotation = Quaternion.Euler(0, -90, 0);
+                        break;
+                    case MoveDir.Right:
+                        mAnimator.Play("KICK");
+                        transform.rotation = Quaternion.Euler(0, 90, 0);
+                        break;
+                    case MoveDir.Down:
+                        mAnimator.Play("KICK");
+                        transform.rotation = Quaternion.Euler(0, 180, 0);
+                        break;
+                }
+            }
+            else
+            {
+
+            }
             // TODO
-            mAnimator.Play("KICK");
         }
         else
         {
@@ -203,8 +276,6 @@ public class BaseController : MonoBehaviour
         Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0, 0.5f);
         transform.position = pos;
 
-        State = CreatureState.Idle;
-        Dir = MoveDir.Down;
         UpdateAnimation();
     }
 
