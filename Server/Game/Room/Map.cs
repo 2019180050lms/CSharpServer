@@ -45,6 +45,16 @@ namespace Server.Game
         {
             return new Vector3Int(a.x + b.x, a.y + b.y, a.z + b.z);
         }
+
+        public static Vector3Int operator-(Vector3Int a, Vector3Int b)
+        {
+            return new Vector3Int(a.x - b.x, a.y - b.y, a.z - b.z);
+        }
+
+        public float magnitude { get { return (float)Math.Sqrt(sqrMagnitude); } }
+        public int sqrMagnitude { get { return (x * x + y * y); } }
+        // (0, 0)에서 갈 수 있는 거리
+        public int cellDistFromZero { get { return Math.Abs(x) + Math.Abs(y); } }
     }
 
     public class Map
@@ -156,7 +166,7 @@ namespace Server.Game
         int[] mDeltaX = new int[] { 0, 0, -1, 1 };
         int[] mCost = new int[] { 10, 10, 10, 10 };
 
-        public List<Vector3Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos, bool ignoreDestCollision = false)
+        public List<Vector3Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos, bool checkObjects = true)
         {
             List<Pos> path = new List<Pos>();
 
@@ -193,9 +203,9 @@ namespace Server.Game
                 {
                     Pos next = new Pos(node.Y + mDeltaY[i], node.X + mDeltaX[i]);
 
-                    if (!ignoreDestCollision || next.Y != dest.Y || next.X != dest.X)
+                    if (next.Y != dest.Y || next.X != dest.X)
                     {
-                        if (CanGo(PosToCell(next)) == false)
+                        if (CanGo(PosToCell(next), checkObjects) == false)
                             continue;
                     }
 

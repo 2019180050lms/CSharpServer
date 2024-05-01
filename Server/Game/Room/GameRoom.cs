@@ -25,13 +25,23 @@ namespace Server.Game
         public void Init(int mapId)
         {
             Map.LoadMap(mapId, "../../../../Common/MapData");
+
+            // 임시
+            Monster monster = ObjectManager.Instance.Add<Monster>();
+            monster.CellPos = new Vector3Int(5, 5, 5);
+            EnterGame(monster);
         }
 
         public void Update()
         {
             lock (mLock)
             {
-                foreach(Projectile projectile in mProjectiles.Values)
+                foreach (Monster monster in mMonsters.Values)
+                {
+                    monster.Update();
+                }
+
+                foreach (Projectile projectile in mProjectiles.Values)
                 {
                     projectile.Update();
                 }
@@ -255,6 +265,17 @@ namespace Server.Game
                     
                 }
             }
+        }
+
+        public Player FindPlayer(Func<GameObject, bool> condition)
+        {
+            foreach(Player player in mPlayers.Values)
+            {
+                if (condition.Invoke(player))
+                    return player;
+            }
+
+            return null;
         }
 
         public void Broadcast(IMessage packet)
