@@ -16,7 +16,7 @@ namespace Server.Game
         public GameRoom Add(int mapId)
         {
             GameRoom gameRoom = new GameRoom();
-            gameRoom.Init(mapId);
+            gameRoom.Push(gameRoom.Init, mapId);
 
             lock (mLock)
             {
@@ -30,7 +30,7 @@ namespace Server.Game
 
         public bool Remove(int roomId)
         {
-            lock (mLock)
+            lock (mLock) 
             {
                 return mRooms.Remove(roomId);
             }

@@ -27,7 +27,7 @@ class PacketHandler
 
         // GameRoom에서 정보가 수정하고 여기서도 수정하게 되면 경합이 발생
         // 정보를 수정할때는 한 쪽에서 정보를 수정하도록 몰아줘야한다.
-        room.HandleMove(player, move);
+        room.Push(room.HandleMove, player, move);
     }
 
     public static void CS_SkillHandler(PacketSession session, IMessage packet)
@@ -43,6 +43,6 @@ class PacketHandler
         if (room == null)
             return;
 
-        room.HandleSkill(player, skill);
+        room.Push(room.HandleSkill, player, skill);
     }
 }

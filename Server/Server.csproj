@@ -11,6 +11,7 @@
     <None Remove="Packet\" />
     <None Remove="Session\" />
     <None Remove="Data\" />
+    <None Remove="Game\Job\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <Folder Include="Session\" />
     <Folder Include="Data\" />
+    <Folder Include="Game\Job\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.3" />
