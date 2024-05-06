@@ -42,7 +42,9 @@ public class PacketManager
 		mOnRecv.Add((ushort)MsgId.ScConnected, MakePacket<SC_Connected>);
         mHandler.Add((ushort)MsgId.ScConnected, PacketHandler.SC_ConnectedHandler);        
 		mOnRecv.Add((ushort)MsgId.ScLogin, MakePacket<SC_Login>);
-        mHandler.Add((ushort)MsgId.ScLogin, PacketHandler.SC_LoginHandler);
+        mHandler.Add((ushort)MsgId.ScLogin, PacketHandler.SC_LoginHandler);        
+		mOnRecv.Add((ushort)MsgId.ScCreatePlayer, MakePacket<SC_CreatePlayer>);
+        mHandler.Add((ushort)MsgId.ScCreatePlayer, PacketHandler.SC_CreatePlayerHandler);
 	}
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

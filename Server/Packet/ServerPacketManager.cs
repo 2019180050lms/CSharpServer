@@ -28,7 +28,11 @@ public class PacketManager
 		mOnRecv.Add((ushort)MsgId.CsSkill, MakePacket<CS_Skill>);
         mHandler.Add((ushort)MsgId.CsSkill, PacketHandler.CS_SkillHandler);        
 		mOnRecv.Add((ushort)MsgId.CsLogin, MakePacket<CS_Login>);
-        mHandler.Add((ushort)MsgId.CsLogin, PacketHandler.CS_LoginHandler);
+        mHandler.Add((ushort)MsgId.CsLogin, PacketHandler.CS_LoginHandler);        
+		mOnRecv.Add((ushort)MsgId.CsEnterGame, MakePacket<CS_EnterGame>);
+        mHandler.Add((ushort)MsgId.CsEnterGame, PacketHandler.CS_EnterGameHandler);        
+		mOnRecv.Add((ushort)MsgId.CsCreatePlayer, MakePacket<CS_CreatePlayer>);
+        mHandler.Add((ushort)MsgId.CsCreatePlayer, PacketHandler.CS_CreatePlayerHandler);
 	}
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

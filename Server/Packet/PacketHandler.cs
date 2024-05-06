@@ -54,27 +54,22 @@ class PacketHandler
 
         Console.WriteLine($"UniqueId {loginPacket.UniqueId}");
 
-        // TODO: 보안 체크
+        clientSession.HandleLogin(loginPacket);
+    }
 
-        // TODO: 문제가 있음 수정 필요
-        using (AppDbContext db = new AppDbContext())
-        {
-            AccountDb findAccount = db.Accounts.Where(a => a.AccountName == loginPacket.UniqueId).FirstOrDefault();
+    public static void CS_EnterGameHandler(PacketSession session, IMessage packet)
+    {
+        CS_EnterGame enterGamePacket = (CS_EnterGame)packet;
+        ClientSession clientSession = (ClientSession)session;
+        clientSession.HandleEnterGame(enterGamePacket);
 
-            if(findAccount != null)
-            {
-                SC_Login loginOk = new SC_Login() { LoginOk = 1 };
-                clientSession.Send(loginOk);
-            }
-            else
-            {
-                AccountDb newAccount = new AccountDb() { AccountName = loginPacket.UniqueId };
-                db.Accounts.Add(newAccount);
-                db.SaveChanges();
+    }
 
-                SC_Login loginOk = new SC_Login() { LoginOk = 1 };
-                clientSession.Send(loginOk);
-            }
-        }
+    public static void CS_CreatePlayerHandler(PacketSession session, IMessage packet)
+    {
+        CS_CreatePlayer createPlayerPacket = (CS_CreatePlayer)packet;
+        ClientSession clientSession = (ClientSession)session;
+        clientSession.HandleCreatePlayer(createPlayerPacket);
+
     }
 }

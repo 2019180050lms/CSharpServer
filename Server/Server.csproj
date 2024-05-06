@@ -13,6 +13,7 @@
     <None Remove="Data\" />
     <None Remove="Game\Job\" />
     <None Remove="DB\" />
+    <None Remove="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
@@ -25,6 +26,7 @@
     <Folder Include="Data\" />
     <Folder Include="Game\Job\" />
     <Folder Include="DB\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.3" />

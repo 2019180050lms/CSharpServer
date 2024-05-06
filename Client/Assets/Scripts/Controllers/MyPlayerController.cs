@@ -42,7 +42,7 @@ public class MyPlayerController : PlayerController
         if (Input.GetKey(KeyCode.Space) && mCoSkillCooltime == null)
         {
             // TODO: 스페이스바 꾹 눌렀을시 패킷을 계속 보내는 점 쿨타임 처리 추가
-            Debug.Log("Skill");
+            //Debug.Log("Skill");
 
             CS_Skill skill = new CS_Skill() { Info = new SkillInfo() };
             skill.Info.SkillId = 2;

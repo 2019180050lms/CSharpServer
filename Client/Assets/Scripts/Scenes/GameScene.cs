@@ -8,11 +8,12 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.Scene.Game;
+        Screen.SetResolution(1024, 768, false);
 
+        SceneType = Define.Scene.Game;
         Managers.Map.LoadMap(1);
 
-        Screen.SetResolution(1024, 768, false);
+
 
         /*
         GameObject player = Managers.Resource.Instantiate("Creature/Player");

@@ -9,11 +9,17 @@ using Server.Data;
 namespace Server
 {
     // Client 통신
-    public class ClientSession : PacketSession
+    // partial - 클래스를 다른 곳에서 정의해서 합쳐서 사용
+    public partial class ClientSession : PacketSession
     {
+        public PlayerServerState ServerState { get; private set; } = PlayerServerState.ServerStateLogin;
+
         public Player MyPlayer { get; set; }
         public int SessionId { get; set; }
 
+        
+
+        #region Network
         public void Send(IMessage packet)
         {
             string msgName = packet.Descriptor.Name.Replace("_", string.Empty);
@@ -35,29 +41,6 @@ namespace Server
 
             SC_Connected connectedPacket = new SC_Connected();
             Send(connectedPacket);
-
-            // TODO: 로비에서 캐릭터 선택
-            // 플레이어 생성
-            MyPlayer = ObjectManager.Instance.Add<Player>();
-            MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
-            MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-            MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
-            MyPlayer.Info.PosInfo.PosX = 0;
-            MyPlayer.Info.PosInfo.PosY = 0;
-            MyPlayer.Info.PosInfo.PosZ = 0;
-            MyPlayer.Info.PosInfo.RotX = 0;
-            MyPlayer.Info.PosInfo.RotY = 40;
-            MyPlayer.Info.PosInfo.RotZ = 0;
-
-            StatInfo stat = null;
-            DataManager.StatDict.TryGetValue(1, out stat);
-            MyPlayer.Stat.MergeFrom(stat);
-
-            MyPlayer.Session = this;
-
-            // TODO: 입장 요청 패킷 들어오면
-            GameRoom room = RoomManager.Instance.Find(1);
-            room.Push(room.EnterGame, MyPlayer);
         }
 
         public override void OnDisconnected(EndPoint endPoint)
@@ -80,6 +63,7 @@ namespace Server
             // Console.WriteLine($"Transferred bytes: {numOfBytes}");
             return numOfBytes;
         }
+        #endregion
     }
 }
 

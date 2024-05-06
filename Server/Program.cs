@@ -32,6 +32,17 @@ namespace Server
 
             var d = DataManager.StatDict;
 
+            /* DB Table Create
+            using (AppDbContext db = new AppDbContext())
+            {
+
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+
+                Console.WriteLine("DB Initialized");
+            }
+            */
+
             GameRoom room = RoomManager.Instance.Add(1);
             TickRoom(room, 50);
 
@@ -47,15 +58,11 @@ namespace Server
             mListener.Init(endPoint, () => { return SessionManager.Instance.Generate(); }, 10, 200);
             Console.WriteLine("Listening...");
 
-            // FlushRoom();
-            //JobTimer.Instance.Push(FlushRoom, 0);
 
-
-            // TODO: JobTimer
             while (true)
             {
                 //JobTimer.Instance.Flush();
-                Thread.Sleep(100);
+                DbTransaction.Instance.Flush();
             }
         }
     }

@@ -1,0 +1,22 @@
+Welcome to Account System Unique Pro, Firstly thank you for purchasing the asset, this asset is to help the beginners understand how to actually create a account system inside
+and application, mobile, Games, even multiplayer this is 100% Compatiable with all these features.
+
+let's get setup....
+
+1. Inside your project your have a "PHP" zip folder, extract this anywhere, recommended to your desktop or project folder to quicker access..
+2. Open the "Config.php" file, and put your database information inside. Username, password, host, and database name. once done hit save
+3. upload "Register.php", "Login.php", "Config.php" to your webhosting provider.
+
+now your all set hosting side, let's go to the unity project.
+
+1. click Scenes/Login
+2. In your Hierarchy your see "ASUPro", select this then your see a component in your inspector named ASUPro_UI
+inside this has 2 variables to change "Regiser Url" and "Login Url", inside these variables your see
+"http://127.0.0.1/ASUPro/Register.php", change this to your domain url where your register script is located.
+copy this step for the login script.
+
+save and play, your all good to go.
+
+Future updates will be more effective, and feedback is apperciated.
+
+any questions contact me directly at skype @ RennTekStudios

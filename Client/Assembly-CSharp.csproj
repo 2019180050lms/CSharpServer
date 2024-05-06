@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets/Scripts/Network/Connector.cs" />
     <Compile Include="Assets/ZSmartTile/Components/ZST_SmartTile.cs" />
+    <Compile Include="Assets/Scripts/Controllers/BaseController.cs" />
     <Compile Include="Assets/Scripts/Packet/ServerSession.cs" />
     <Compile Include="Assets/Scripts/Managers/Contents/MapManager.cs" />
     <Compile Include="Assets/Scripts/Network/Session.cs" />
@@ -95,10 +96,14 @@
     <Compile Include="Assets/Scripts/Managers/Core/PoolManager.cs" />
     <Compile Include="Assets/Scripts/Packet/Protocol.cs" />
     <Compile Include="Assets/ZSmartTile/Classes/ZST_MapManager.cs" />
-    <Compile Include="Assets/Scripts/Controllers/BaseController.cs" />
+    <Compile Include="Assets/Scripts/Controllers/CameraController.cs" />
+    <Compile Include="Assets/Scripts/Scenes/LoginScene.cs" />
+    <Compile Include="Assets/ASUPro/Scripts/ASUPro_Core.cs" />
+    <Compile Include="Assets/ASUPro/Scripts/ASUPro_UI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Resources/Map/Map_001.txt" />
+    <None Include="Assets/ASUPro/Instructions.txt" />
     <None Include="Assets/Libs/System.Memory.dll" />
     <None Include="Assets/Libs/System.Buffers.dll" />
     <None Include="Assets/Resources/Map/Map_002.txt" />

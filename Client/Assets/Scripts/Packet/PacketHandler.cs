@@ -4,6 +4,7 @@ using ServerCore;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 class PacketHandler
 {
@@ -11,6 +12,7 @@ class PacketHandler
     {
         SC_EnterGame enterGamePacket = packet as SC_EnterGame;
 
+        //anagers.Scene.LoadScene(Define.Scene.Game);
         Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
     }
 
@@ -108,14 +110,53 @@ class PacketHandler
     public static void SC_ConnectedHandler(PacketSession session, IMessage packet)
     {
         Debug.Log("SC_ConnectedHandler");
-        CS_Login loginPacket = new CS_Login();
-        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
-        Managers.Network.Send(loginPacket);
+        // CS_Login loginPacket = new CS_Login();
+        // loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
+     
+        Managers.Scene.LoadScene(Define.Scene.Login);
+        // Managers.Network.Send(loginPacket);
     }
 
+    // 로그인 OK + 캐릭터 목록
     public static void SC_LoginHandler(PacketSession session, IMessage packet)
     {
         SC_Login loginPacket = packet as SC_Login;
         Debug.Log($"LoginOk: {loginPacket.LoginOk}");
+
+        // TODO: 로비 목록에서 캐릭터 보여주고 선택할 수 있도록
+        if(loginPacket.Players == null || loginPacket.Players.Count == 0)
+        {
+            Managers.Scene.LoadScene(Define.Scene.Game);
+            CS_CreatePlayer createPacket = new CS_CreatePlayer();
+            createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
+            Managers.Network.Send(createPacket);
+        }
+        else
+        {
+            Managers.Scene.LoadScene(Define.Scene.Game);
+            // 무조건 첫번째 캐릭으로 로그인
+            LobbyPlayerInfo info = loginPacket.Players[0];
+            CS_EnterGame enterGamePacket = new CS_EnterGame();
+            enterGamePacket.Name = info.Name;
+            Managers.Network.Send(enterGamePacket);
+        }
+    }
+
+    public static void SC_CreatePlayerHandler(PacketSession session, IMessage packet)
+    {
+        SC_CreatePlayer createOkPacket = packet as SC_CreatePlayer;
+
+        if(createOkPacket.Player == null)
+        {
+            CS_CreatePlayer createPacket = new CS_CreatePlayer();
+            createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
+            Managers.Network.Send(createPacket);
+        }
+        else
+        {
+            CS_EnterGame enterGamePacket = new CS_EnterGame();
+            enterGamePacket.Name = createOkPacket.Player.Name;
+            Managers.Network.Send(enterGamePacket);
+        }
     }
 }
