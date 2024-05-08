@@ -83,7 +83,6 @@ namespace Server.Game
                 BroadcastMove();
                 return;
 			}
-
 			Vector3Int dir = mTarget.CellPos - CellPos;
 			int dist = dir.cellDistFromZero;
 			if(dist == 0 || dist > mChaseCellDist)
@@ -105,7 +104,6 @@ namespace Server.Game
 				BroadcastMove();
                 return;
             }
-
 			// 스킬로 넘어갈지 체크
 			if(dist <= mSkillRange && (dir.x == 0 || dir.y == 0))
 			{
@@ -113,7 +111,6 @@ namespace Server.Game
 				State = CreatureState.Skill;
 				return;
 			}
-
 			// 이동
 			Dir = GetDirFromVec(path[1] - CellPos);
 			Room.Map.ApplyMove(this, path[1]);
